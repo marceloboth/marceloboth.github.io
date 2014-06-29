@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Personal blog]]></title>
-  <link href="http://marceloboth.github.io/atom.xml" rel="self"/>
+  <title><![CDATA[Category: Iniciante | Personal blog]]></title>
+  <link href="http://marceloboth.github.io/categories/iniciante/atom.xml" rel="self"/>
   <link href="http://marceloboth.github.io/"/>
   <updated>2014-06-28T22:48:18-03:00</updated>
   <id>http://marceloboth.github.io/</id>
@@ -12,15 +12,6 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
-  
-  <entry>
-    <title type="html"><![CDATA[CRUD Com Rails - Criando Um Cadastro Usando Rspec]]></title>
-    <link href="http://marceloboth.github.io/2014/06/crud-com-rails-criando-um-cadastro-usando-rspec/"/>
-    <updated>2014-06-28T22:22:49-03:00</updated>
-    <id>http://marceloboth.github.io/2014/06/crud-com-rails-criando-um-cadastro-usando-rspec</id>
-    <content type="html"><![CDATA[
-]]></content>
-  </entry>
   
   <entry>
     <title type="html"><![CDATA[Iniciando Em Ruby on Rails]]></title>
