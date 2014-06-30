@@ -4,7 +4,7 @@
   <title><![CDATA[Personal blog]]></title>
   <link href="http://marceloboth.github.io/atom.xml" rel="self"/>
   <link href="http://marceloboth.github.io/"/>
-  <updated>2014-06-30T20:44:39-03:00</updated>
+  <updated>2014-06-30T20:46:41-03:00</updated>
   <id>http://marceloboth.github.io/</id>
   <author>
     <name><![CDATA[Marcelo J. Both]]></name>
@@ -197,7 +197,7 @@ No arquivo criado vamos especificar o que desejamos que o nosso cadastro faça. 
 
 <figure class='code'><figcaption><span>Comando para gerar tudo relacionado ao model </span></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>rails g model project name:string description:string
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>rails g model product name:string description:string
 </span></code></pre></td></tr></table></div></figure>
 
 
