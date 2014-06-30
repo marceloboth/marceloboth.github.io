@@ -9,8 +9,7 @@
   <meta name="author" content="Marcelo J. Both">
 
   
-  <meta name="description" content="
-">
+  <meta name="description" content="O acrônimo CRUD (Create, Read, Update e Delete) é algo que todo iniciante em linguagens de programação ou frameworks necessita saber, pois significa &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -96,7 +95,346 @@
   </header>
 
 
-  <div class="entry-content">
+  <div class="entry-content"><p>O acrônimo CRUD (Create, Read, Update e Delete) é algo que todo iniciante em linguagens de programação ou frameworks necessita saber, pois significa nada menos que as operações básicas para a criação/manutenção de cadastros.</p>
+
+<p>O nosso primeiro passo é a parte de criação (A letra C do CRUD). Para realizar todos os passos vamos desenvolver usando as metodologias de BDD/TDD, que irá nos possibilitar um código estável e mais fácil de manter.</p>
+
+<h2>Criando um cadastro</h2>
+
+<p>Nessa primeira história vamos criar um resource (recurso) que representa um produto, é somente para fins demonstrativos, o nome é o que menos interessa. Para o produto vamos ter dois atributos que são necessários: nome e descrição. O nosso primeiro passo é criar a nossa feature de spec, em spec/features (crie esse diretorios se não existirem), crie o diretório products e um arquivo com o nome de creating_products_spec.rb. Use sempre o inglês quando puder em sua aplicação Rails, garanto que você evitará muitas dores de cabeça.
+No arquivo criado vamos especificar o que desejamos que o nosso cadastro faça. Abaixo está o código da especificação:</p>
+
+<figure class='code'><figcaption><span>spec/features/products/creating_products_spec.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;spec_helper&#39;</span> <span class="c1"># use ‘rails_helper’ caso esteja usando rails composer</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">feature</span> <span class="s1">&#39;Criando Produtos&#39;</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">scenario</span> <span class="s2">&quot;posso criar um produto&quot;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">visit</span> <span class="s1">&#39;/&#39;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">click_link</span> <span class="s1">&#39;Novo Produto&#39;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">fill_in</span> <span class="s1">&#39;Nome&#39;</span><span class="p">,</span> <span class="ss">with</span><span class="p">:</span> <span class="s1">&#39;Produto 1&#39;</span>
+</span><span class='line'>    <span class="n">fill_in</span> <span class="s1">&#39;Descrição&#39;</span><span class="p">,</span> <span class="ss">with</span><span class="p">:</span> <span class="s1">&#39;Produto 1 (um)&#39;</span>
+</span><span class='line'>    <span class="n">click_button</span> <span class="s1">&#39;Criar produto&#39;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">expect</span><span class="p">(</span><span class="n">page</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">have_content</span><span class="p">(</span><span class="s1">&#39;Produto foi criado.&#39;</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Execute o comando rspec spec/features/products/creating_products_spec.rb. Esse comando executará a nossa feature de teste e que apresentará o seguinte erro:</p>
+
+<figure class='code'><figcaption><span>Erro no bash </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>Failures:
+</span><span class='line'>
+</span><span class='line'>  1<span class="o">)</span> Criando Produtos posso criar um produto
+</span><span class='line'>      Failure/Error: click_link <span class="s1">&#39;Novo Produto&#39;</span>
+</span><span class='line'>      Capybara::ElementNotFound:
+</span><span class='line'>        Unable to find link <span class="s2">&quot;Novo Produto&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>O teste falhará pois não temos o link “Novo Produto” na rota “/”, que é a nosso root (página inicial). Então antes de seguir, vamos criar o link na página inicial. Coloque o seguinte código dentro do arquivo <em>navigation_links.html.erb, que está na pasta layouts de nossas views (app/views/layouts/</em>navigation_links.html.erb):</p>
+
+<figure class='code'><figcaption><span>app/views/layouts/_navigation_links.html.erb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='erb'><span class='line'><span class="x">  &lt;li&gt;</span><span class="cp">&lt;%=</span> <span class="n">link_to</span> <span class="s1">&#39;Novo Produto&#39;</span><span class="p">,</span> <span class="n">new_product_path</span> <span class="cp">%&gt;</span><span class="x">&lt;/li&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Rode os testes novamente e ocorrera um erro pois não definimos uma rota para os nossos produtos:</p>
+
+<figure class='code'><figcaption><span>Erro no bash </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>  Failure/Error: visit <span class="s1">&#39;/&#39;</span>
+</span><span class='line'>  ActionView::Template::Error:
+</span><span class='line'>    undefined <span class="nb">local </span>variable or method <span class="s1">&#39;new_product_path&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Adicione a rota no arquivo config/routes.rb:</p>
+
+<figure class='code'><figcaption><span>config/routes.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="n">resources</span> <span class="ss">:products</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Rode os testes novamente e acontecerá um nova quebra na nossa feature. Dessa vez é devido que a nossa suite de testes conseguiu encontrar a rota, mas não encontrou nenhum controller que condize-se com o resource procurado. Veja o erro:</p>
+
+<figure class='code'><figcaption><span>Erro no bash </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>  Failure/Error: click_link <span class="s1">&#39;Novo Produto&#39;</span>
+</span><span class='line'>  ActionController::RoutingError:
+</span><span class='line'>    uninitialized constant ProductsController
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Essa ficou fácil. Crie o controller, em app/controllers/products_controller.rb. Nesse arquivo declare um classe ruby com o nome de ProductsController extendendo de ApplicationController:</p>
+
+<figure class='code'><figcaption><span>app/controllers/products_controller.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">ProductsController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Rode novamente o teste. Problema resolvido, mas outro surgiu. Agora o rspec não conseguiu encontrar uma action no controller, que refletisse com a operação de novo cadastro. Veja:</p>
+
+<figure class='code'><figcaption><span>Ação ainda não existe </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>  Failure/Error: click_link <span class="s1">&#39;Novo Produto&#39;</span>
+</span><span class='line'>  AbstractController::ActionNotFound:
+</span><span class='line'>    The action <span class="s1">&#39;new&#39;</span> could not be found <span class="k">for </span>ProductsController
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Ao controller criado instantes atrás, adicione a action new:</p>
+
+<figure class='code'><figcaption><span>Ação de novo cadastro </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">ProductsController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">new</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Se rodarmos novamente os testes, nossa ação é encontrada, porém o template erb não existe, ocasionando outra quebra:</p>
+
+<figure class='code'><figcaption><span>Erro pois o template não encontrado </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>  Failure/Error: click_link <span class="s1">&#39;Novo Produto&#39;</span>
+</span><span class='line'>  ActionView::MissingTemplate:
+</span><span class='line'>      Missing template products/new, application/new with ….
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Devemos criar o nosso template na camada de views do projeto. Então na pasta app/views, crie um pasta chamada products e nela um arquivo com o nome new.html.erb. Feito isso rode o teste mais uma vez. Agora temos um problema diferente de todos até agora. O Capybara na tentativa de preencher os campos do formulário (que não existe) acaba gerando um novo erro:</p>
+
+<figure class='code'><figcaption><span>Não encontrou o elemento Nome </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>  Failure/Error: fill_in <span class="s1">&#39;Nome&#39;</span>, with: <span class="s1">&#39;Produto 1&#39;</span>
+</span><span class='line'>  Capybara::ElementNotFound:
+</span><span class='line'>       Unable to find field <span class="s2">&quot;Nome&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Como podemos ver, o Capybara não conseguiu encontrar o elemento com o field “Nome”. Isso é lógico, nós não criamos ainda o formulário com os campos. Porém antes teremos que criar uma instância de Product em nossa controller e passar a nossa view para que ela possua os campos necessários:</p>
+
+<figure class='code'><figcaption><span>Implementação da action new </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">new</span>
+</span><span class='line'>  <span class="vi">@product</span> <span class="o">=</span> <span class="no">Product</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>A constante Product  é o nosso model, que deve ser criado em app/models/product.rb. Mas antes de sair criando o arquivo, vamos acelerar as coisas usando um gerador de código do Rails.</p>
+
+<figure class='code'><figcaption><span>Comando para gerar tudo relacionado ao model </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>rails g model project name:string description:string
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Esse generator (gerador) nos poupa um tempo criando uma série de arquivos, como o arquivo de migração do banco de dados com os campos necessários, nosso model extendendo de ActiveRecord que contém um infinidade de funcionalidades para trabalhar com nossos dados e arquivos de testes unitários.</p>
+
+<p>Um Model deve ser capaz de prover o acesso a camada de dados e é por isso que ele utiliza o Active Record. O Model também provê um local para a lógica de negócio, bem como, fazer validações e associações entre modelos.</p>
+
+<p>Entre os arquivos gerados, está o arquivo de migration. Migration é um mecanismo eficiente de manter um controle de versão de nosso banco de dados, onde podemos evoluir e retrocer nosso schema quando necessário, sem trabalho adicional. Nosso arquivo de migração está é gerado dentro da pasta db/migrate e o nome leva em considereção o timestamp do momento de geração, para nunca ter o mesmo nome e o Rails conseguir controlar o historico de migrações. Nosso arquivo db/migrate/[data]_create_product.rb apresenta o seguite código Ruby:</p>
+
+<figure class='code'><figcaption><span>db/migrate/[data]_create_product.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">CreateProducts</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Migration</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">change</span>
+</span><span class='line'>    <span class="n">create_table</span> <span class="ss">:products</span> <span class="k">do</span> <span class="o">|</span><span class="n">t</span><span class="o">|</span>
+</span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">string</span> <span class="ss">:name</span>
+</span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">string</span> <span class="ss">:description</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">timestamps</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Devemos rodar o comando abaixo para ter o nosso banco de dados atualizado:</p>
+
+<figure class='code'><figcaption><span>Comando para atualizar nosso banco de dados </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>rake db:migrate
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>O esquema de nomenclatura é interessante, o Rails irá ter o model com o nome product (singular), no entanto a tabela no banco de dados será products(plural).</p>
+
+<p>Com nosso model product criado e o nosso banco com a tabela necessária, vamos voltar ao formulário. Execute o teste novamente:</p>
+
+<figure class='code'><figcaption><span>Rodando os testes </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>rspec spec/features/products/creating_products_spec.rb
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>E veremos que nada mudou desde a ultima execução, porém agora temos nosso banco de dados pronto, e um objeto do tipo Product que dará os atributos necessários para montar nosso formulário de cadastro. Abra o arquivo app/views/products/new.html.erb e adicione o código abaixo:</p>
+
+<figure class='code'><figcaption><span>app/views/products/new.html.erb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='erb'><span class='line'><span class="x">&lt;h2&gt;New Product&lt;/h2&gt;</span>
+</span><span class='line'><span class="cp">&lt;%=</span> <span class="n">form_for</span><span class="p">(</span><span class="vi">@product</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">  &lt;p&gt;</span>
+</span><span class='line'><span class="x">    </span><span class="cp">&lt;%=</span> <span class="n">f</span><span class="o">.</span><span class="n">label</span> <span class="ss">:name</span><span class="p">,</span> <span class="s2">&quot;Nome&quot;</span> <span class="cp">%&gt;</span><span class="x">&lt;br /&gt;</span>
+</span><span class='line'><span class="x">    </span><span class="cp">&lt;%=</span> <span class="n">f</span><span class="o">.</span><span class="n">text_field</span> <span class="ss">:name</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">  &lt;/p&gt;</span>
+</span><span class='line'><span class="x">  &lt;p&gt;</span>
+</span><span class='line'><span class="x">    </span><span class="cp">&lt;%=</span> <span class="n">f</span><span class="o">.</span><span class="n">label</span> <span class="ss">:description</span><span class="p">,</span> <span class="s2">&quot;Descrição&quot;</span> <span class="cp">%&gt;</span><span class="x">&lt;br /&gt;</span>
+</span><span class='line'><span class="x">    </span><span class="cp">&lt;%=</span> <span class="n">f</span><span class="o">.</span><span class="n">text_field</span> <span class="ss">:description</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">  &lt;/p&gt;</span>
+</span><span class='line'><span class="x">  &lt;p&gt;</span>
+</span><span class='line'><span class="x">     </span><span class="cp">&lt;%=</span> <span class="n">f</span><span class="o">.</span><span class="n">submit</span> <span class="s2">&quot;Criar produto&quot;</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">  &lt;/p&gt;</span>
+</span><span class='line'><span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Formulário criado, devemos rodar nosso teste novamente. Fazendo isso veremos que nesse ponto, o que ocorre é que o formulário é preenchido, porém ao ser submitido, nenhuma ação para criar (create) é encontrado no nosso controller:</p>
+
+<figure class='code'><figcaption><span>A ação create não esta definida </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>Failure/Error: click_button <span class="s1">&#39;Criar produto&#39;</span>
+</span><span class='line'>AbstractController::ActionNotFound:
+</span><span class='line'>  The action <span class="s1">&#39;create&#39;</span> could not be found <span class="k">for </span>ProductsController
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Então para resolver isso devemos criar o nosso método create:</p>
+
+<figure class='code'><figcaption><span>Definindo a action create </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">create</span>
+</span><span class='line'>  <span class="vi">@product</span> <span class="o">=</span> <span class="no">Product</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">product_params</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">if</span> <span class="vi">@product</span><span class="o">.</span><span class="n">save</span>
+</span><span class='line'>    <span class="n">redirect_to</span> <span class="vi">@product</span><span class="p">,</span> <span class="ss">notice</span><span class="p">:</span> <span class="s2">&quot;Produto foi criado.&quot;</span>
+</span><span class='line'>  <span class="k">else</span>
+</span><span class='line'>    <span class="n">flash</span><span class="o">[</span><span class="ss">:alert</span><span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;Produto não pode ser criado.&quot;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">render</span> <span class="s2">&quot;new&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Também defina um  método privado para permitir que nossos parametros sejam lidos, sem serem bloqueados pelo mecanismo de Strong Parameters do Rails 4:</p>
+
+<figure class='code'><figcaption><span>Adicionando os campos permitidos </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">project_params</span>
+</span><span class='line'>  <span class="n">params</span><span class="o">.</span><span class="n">require</span><span class="p">(</span><span class="ss">:project</span><span class="p">)</span><span class="o">.</span><span class="n">permit</span><span class="p">(</span><span class="ss">:name</span><span class="p">,</span> <span class="ss">:description</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Rode seu teste e ele ira dizer que não encontrou a action show. Isso quer dizer que o nosso cadastro está sendo salvo, porém não temos uma ação para fazer a exibição de cadastro. Adicione a ação show ao seu ProductController:</p>
+
+<figure class='code'><figcaption><span>Nossa ação para busca e exibir o usuário </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">show</span>
+</span><span class='line'>  <span class="vi">@product</span> <span class="o">=</span> <span class="no">Product</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:id</span><span class="o">]</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Se rodarmos os testes vamos ter um erro por que o template correspondente a action, não pode ser encontrada, crie um o seguinte arquivo app/views/products/show.html.erb, e adicione o código abaixo:</p>
+
+<figure class='code'><figcaption><span>app/views/products/show.html.erb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&lt;</span><span class="n">h2</span><span class="o">&gt;&lt;</span><span class="sx">%= @product.name %&gt;&lt;/h2&gt;</span>
+</span><span class='line'><span class="sx">&lt;p&gt;&lt;%=</span> <span class="vi">@product</span><span class="o">.</span><span class="n">description</span> <span class="sx">%&gt;&lt;/p&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Rodandos os testes, nossa feature vai passar. Se quiser testar manualmente, inicie o servidor com o comando rails s e realize um cadastro.</p>
 </div>
   
   
