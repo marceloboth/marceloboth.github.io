@@ -246,7 +246,7 @@ No arquivo criado vamos especificar o que desejamos que o nosso cadastro faça. 
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Devemos criar o nosso template na camada de views do projeto. Então na pasta app/views, crie um pasta chamada products e nela um arquivo com o nome new.html.erb. Feito isso rode o teste mais uma vez. Agora temos um problema diferente de todos até agora. O Capybara na tentativa de preencher os campos do formulário (que não existe) acaba gerando um novo erro:</p>
+<p>Devemos criar o nosso template na camada de views do projeto. Então na pasta app/views, crie uma pasta chamada products e nela um arquivo com o nome new.html.erb. Feito isso rode o teste mais uma vez. Agora temos um problema diferente de todos até agora. O Capybara na tentativa de preencher os campos do formulário (que não existe) acaba gerando um novo erro:</p>
 
 <figure class='code'><figcaption><span>Não encontrou o elemento Nome </span></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -406,9 +406,11 @@ No arquivo criado vamos especificar o que desejamos que o nosso cadastro faça. 
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">project_params</span>
-</span><span class='line'>  <span class="n">params</span><span class="o">.</span><span class="n">require</span><span class="p">(</span><span class="ss">:project</span><span class="p">)</span><span class="o">.</span><span class="n">permit</span><span class="p">(</span><span class="ss">:name</span><span class="p">,</span> <span class="ss">:description</span><span class="p">)</span>
-</span><span class='line'><span class="k">end</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="kp">private</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">project_params</span>
+</span><span class='line'>    <span class="n">params</span><span class="o">.</span><span class="n">require</span><span class="p">(</span><span class="ss">:project</span><span class="p">)</span><span class="o">.</span><span class="n">permit</span><span class="p">(</span><span class="ss">:name</span><span class="p">,</span> <span class="ss">:description</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
