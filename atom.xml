@@ -4,7 +4,7 @@
   <title><![CDATA[Personal blog]]></title>
   <link href="http://marceloboth.github.io/atom.xml" rel="self"/>
   <link href="http://marceloboth.github.io/"/>
-  <updated>2014-06-30T20:46:41-03:00</updated>
+  <updated>2014-06-30T21:05:02-03:00</updated>
   <id>http://marceloboth.github.io/</id>
   <author>
     <name><![CDATA[Marcelo J. Both]]></name>
@@ -197,7 +197,7 @@ No arquivo criado vamos especificar o que desejamos que o nosso cadastro faça. 
 
 <figure class='code'><figcaption><span>Comando para gerar tudo relacionado ao model </span></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>rails g model product name:string description:string
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>rails g model productect name:string description:string
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -331,8 +331,8 @@ No arquivo criado vamos especificar o que desejamos que o nosso cadastro faça. 
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="kp">private</span>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">project_params</span>
-</span><span class='line'>    <span class="n">params</span><span class="o">.</span><span class="n">require</span><span class="p">(</span><span class="ss">:project</span><span class="p">)</span><span class="o">.</span><span class="n">permit</span><span class="p">(</span><span class="ss">:name</span><span class="p">,</span> <span class="ss">:description</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">product_params</span>
+</span><span class='line'>    <span class="n">params</span><span class="o">.</span><span class="n">require</span><span class="p">(</span><span class="ss">:product</span><span class="p">)</span><span class="o">.</span><span class="n">permit</span><span class="p">(</span><span class="ss">:name</span><span class="p">,</span> <span class="ss">:description</span><span class="p">)</span>
 </span><span class='line'>  <span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
 
