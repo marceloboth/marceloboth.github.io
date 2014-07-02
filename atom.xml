@@ -4,7 +4,7 @@
   <title><![CDATA[Personal blog]]></title>
   <link href="http://marceloboth.github.io/atom.xml" rel="self"/>
   <link href="http://marceloboth.github.io/"/>
-  <updated>2014-06-30T21:05:02-03:00</updated>
+  <updated>2014-07-01T23:15:55-03:00</updated>
   <id>http://marceloboth.github.io/</id>
   <author>
     <name><![CDATA[Marcelo J. Both]]></name>
@@ -295,7 +295,7 @@ No arquivo criado vamos especificar o que desejamos que o nosso cadastro faça. 
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Então para resolver isso devemos criar o nosso método create:</p>
+<p>Então para resolver isso devemos criar o nosso método create dentro do ProductContoller:</p>
 
 <figure class='code'><figcaption><span>Definindo a action create </span></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
