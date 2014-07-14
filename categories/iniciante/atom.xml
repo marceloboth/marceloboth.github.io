@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Iniciante | Personal blog]]></title>
   <link href="http://marceloboth.github.io/categories/iniciante/atom.xml" rel="self"/>
   <link href="http://marceloboth.github.io/"/>
-  <updated>2014-07-14T16:23:04-03:00</updated>
+  <updated>2014-07-14T18:05:22-03:00</updated>
   <id>http://marceloboth.github.io/</id>
   <author>
     <name><![CDATA[Marcelo J. Both]]></name>
@@ -646,6 +646,268 @@ o seguinte código:</p>
 
 <p>Mas que beleza! Nosso modelo está validando nossos dados e temos a garantia disso
 com os testes unitários, hora de testar integrado e ajustar nossas mensagens.</p>
+
+<h2>Testando de maneira integrada</h2>
+
+<p>Antes de continuar a implementação, vamos refatorar a nossa spec feature <code>spec/features/products/creating_products_spec.rb</code>. Vamos adicionar um bloco <code>before</code>,
+e nele vamos colocar o que estará repetindo nos outros cenários, nossa feature deve ser
+semelhante a isso:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>spec/features/products/creating_products_spec.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="nb">require</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">rails_helper</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;  feature &amp;lsquo;Criando Produtos&amp;rsquo; do&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">before</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">visit</span> <span class="s1">&#39;/&#39;</span>
+</span><span class='line'>  <span class="n">click_link</span> <span class="s1">&#39;Novo Produto&#39;</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">scenario</span> <span class="s2">&quot;posso criar um produto&quot;</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">fill_in</span> <span class="s1">&#39;Nome&#39;</span><span class="p">,</span> <span class="ss">with</span><span class="p">:</span> <span class="s1">&#39;Produto 1&#39;</span>
+</span><span class='line'>  <span class="n">fill_in</span> <span class="s1">&#39;Descrição&#39;</span><span class="p">,</span> <span class="ss">with</span><span class="p">:</span> <span class="s1">&#39;Produto 1 (um)&#39;</span>
+</span><span class='line'>  <span class="n">click_button</span> <span class="s1">&#39;Criar produto&#39;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">expect</span><span class="p">(</span><span class="n">page</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">have_content</span><span class="p">(</span><span class="s1">&#39;Produto foi criado.&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'><span class="o">&lt;</span><span class="sr">/code&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Rode a spec com o comando <code>rspec spec/features/products/creating_products_spec.rb</code>, seu primeiro
+cenário deverá falhar. Agora estamos validando nossos campos, e a nossa descrição não está
+no tamanho correto, corrija, colocando uma descrição com pelo menos 15 caracteres, rode o teste
+novamente e tudo estará correto.</p>
+
+<p>Vamos agora focar nos cenários de teste negativo. Primeiro para valores do campo nome.
+Crie um novo cenário abaixo do último criado, como o seguinte código:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>insira em spec/features/products/creating_products_spec.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="n">scenario</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">com</span> <span class="n">nome</span> <span class="n">inv</span><span class="err">á</span><span class="n">lido</span> <span class="n">n</span><span class="err">ã</span><span class="n">o</span> <span class="n">posso</span> <span class="n">criar</span> <span class="n">um</span> <span class="n">produto</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span> <span class="k">do</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;fill_in &#39;Nome&#39;, with: &#39;&#39;</span>
+</span><span class='line'><span class="sr">fill_in &#39;Descrição&#39;, with: &#39;Produto com uma bela descrição de teste&#39;</span>
+</span><span class='line'><span class="sr">click_button &#39;Criar produto&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">expect(page).to have_content(&#39;Nome é muito curto (mínimo: 5 caracteres)&#39;)</span>
+</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;  end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Se rodar o teste, irá falhar, pois essa mensagem não está sendo exibida. Vamos criar
+um arquivo, na pasta shared de nossas views, com o nome de <em>errors.html.erb
+(app/views/shared/</em>errors.html.erb). Será um <code>partial</code>, que irá exibir todos os
+erros de validação.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>insira em app/views/shared/_errors.html.erb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">%</span> <span class="k">if</span> <span class="n">object</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">any?</span> <span class="sx">%&gt;</span>
+</span><span class='line'><span class="sx">  &lt;div id=&quot;error_explanation&quot;&gt;</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;&amp;lt;div class=&quot;alert alert-error&quot;&amp;gt;</span>
+</span><span class='line'><span class="sr">  O formulário contém &amp;lt;%= pluralize(object.errors.count, &quot;erro&quot;) %&amp;gt;.</span>
+</span><span class='line'><span class="sr">&amp;lt;/</span><span class="n">div</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span>
+</span><span class='line'><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="n">ul</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span>
+</span><span class='line'>  <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">%</span> <span class="n">object</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">full_messages</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">msg</span><span class="o">|</span> <span class="sx">%&amp;gt;</span>
+</span><span class='line'><span class="sx">  &amp;</span><span class="n">lt</span><span class="p">;</span><span class="n">li</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span><span class="o">*</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">%=</span> <span class="n">msg</span> <span class="sx">%&amp;gt;&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">/</span><span class="n">li</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span>
+</span><span class='line'>  <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">%</span> <span class="k">end</span> <span class="sx">%&amp;gt;</span>
+</span><span class='line'><span class="sx">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">/</span><span class="n">ul</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="sr">/code&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="o">&lt;</span><span class="sr">/div&gt;</span>
+</span><span class='line'><span class="sr">  &amp;lt;% end %&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Também deve-se incluir esse arquivo no formulário de cadastro:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>altere em app/views/products/new.html.erb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="o">&lt;</span><span class="n">h2</span><span class="o">&gt;</span><span class="no">New</span> <span class="no">Product</span><span class="o">&lt;</span><span class="sr">/h2&gt;&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="sx">%= form_for(@product) do |f| %&gt;&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sx">&lt;pre&gt;&lt;code&gt;&amp;lt;%=</span> <span class="n">render</span> <span class="s1">&#39;shared/errors&#39;</span><span class="p">,</span> <span class="ss">object</span><span class="p">:</span> <span class="n">f</span><span class="o">.</span><span class="n">object</span> <span class="sx">%&amp;gt;</span>
+</span><span class='line'><span class="sx">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="nb">p</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span>
+</span><span class='line'>  <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="sx">%= f.label :name, &quot;Nome&quot; %&amp;gt;&amp;lt;br /&amp;gt;</span>
+</span><span class='line'><span class="sx">  &amp;lt;%=</span> <span class="n">f</span><span class="o">.</span><span class="n">text_field</span> <span class="ss">:name</span> <span class="sx">%&amp;gt;</span>
+</span><span class='line'><span class="sx">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">/</span><span class="nb">p</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span>
+</span><span class='line'><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="nb">p</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span>
+</span><span class='line'>  <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="sx">%= f.label :description, &quot;Descrição&quot; %&amp;gt;&amp;lt;br /&amp;gt;</span>
+</span><span class='line'><span class="sx">  &amp;lt;%=</span> <span class="n">f</span><span class="o">.</span><span class="n">text_field</span> <span class="ss">:description</span> <span class="sx">%&amp;gt;</span>
+</span><span class='line'><span class="sx">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">/</span><span class="nb">p</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span>
+</span><span class='line'><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="nb">p</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span>
+</span><span class='line'>  <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">%=</span> <span class="n">f</span><span class="o">.</span><span class="n">submit</span> <span class="s2">&quot;Criar produto&quot;</span> <span class="sx">%&amp;gt;</span>
+</span><span class='line'><span class="sx">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">/</span><span class="nb">p</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="sr">/code&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">%</span> <span class="k">end</span> <span class="o">%&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Podemos rodar nosso teste novamente, e teremos ainda algum erro, mas estamos quase.
+Precisamos ajustar para que nossos atributos (name e description) sejam reconhecidos
+como nome e descrição. Basta mudar no nosso arquivo de tradução  em <code>config/locales/pt-BR/pt-BR.yml</code></p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>adicione em config/locales/pt-BR/pt-BR.yml </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'>  <span class="l-Scalar-Plain">activerecord:&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="l-Scalar-Plain">&lt;pre&gt;&lt;code&gt;models</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">product</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Produto</span>
+</span><span class='line'><span class="l-Scalar-Plain">attributes</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">product</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Nome</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">description</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Descrição</span>
+</span><span class='line'><span class="l-Scalar-Plain">&lt;/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="l-Scalar-Plain">&lt;p&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Dessa maneira podemos traduzir tudo que o active record gera automáticamente, é uma maneira
+muito flexível de se traduzir o nosso sistema. Rode novamente os testes e dessa vez, nossa
+spec passou. Hora de refatorar. Agora que colocamos a tradução dos campos do active record,
+não precisamos mais a tradução que está fixa nos campos do formulário de cadastro. Remova
+a tradução:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>remova a tradução em app/views/products/new.html.erb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="o">&lt;</span><span class="n">h2</span><span class="o">&gt;</span><span class="no">New</span> <span class="no">Product</span><span class="o">&lt;</span><span class="sr">/h2&gt;&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="sx">%= form_for(@product) do |f| %&gt;&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sx">&lt;pre&gt;&lt;code&gt;&amp;lt;%=</span> <span class="n">render</span> <span class="s1">&#39;shared/errors&#39;</span><span class="p">,</span> <span class="ss">object</span><span class="p">:</span> <span class="n">f</span><span class="o">.</span><span class="n">object</span> <span class="sx">%&amp;gt;</span>
+</span><span class='line'><span class="sx">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="nb">p</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span>
+</span><span class='line'>  <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="sx">%= f.label :name %&amp;gt;&amp;lt;br /&amp;gt;</span>
+</span><span class='line'><span class="sx">  &amp;lt;%=</span> <span class="n">f</span><span class="o">.</span><span class="n">text_field</span> <span class="ss">:name</span> <span class="sx">%&amp;gt;</span>
+</span><span class='line'><span class="sx">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">/</span><span class="nb">p</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span>
+</span><span class='line'><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="nb">p</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span>
+</span><span class='line'>  <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="sx">%= f.label :description %&amp;gt;&amp;lt;br /&amp;gt;</span>
+</span><span class='line'><span class="sx">  &amp;lt;%=</span> <span class="n">f</span><span class="o">.</span><span class="n">text_field</span> <span class="ss">:description</span> <span class="sx">%&amp;gt;</span>
+</span><span class='line'><span class="sx">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">/</span><span class="nb">p</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span>
+</span><span class='line'><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="nb">p</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span>
+</span><span class='line'>  <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">%=</span> <span class="n">f</span><span class="o">.</span><span class="n">submit</span> <span class="s2">&quot;Criar produto&quot;</span> <span class="sx">%&amp;gt;</span>
+</span><span class='line'><span class="sx">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">/</span><span class="nb">p</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="sr">/code&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">%</span> <span class="k">end</span> <span class="o">%&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Complete nossa spec com teste para descrição:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>insira em spec/features/products/creating_products_spec.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="n">scenario</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">com</span> <span class="n">descri</span><span class="err">çã</span><span class="n">o</span> <span class="n">inv</span><span class="err">á</span><span class="n">lida</span> <span class="n">n</span><span class="err">ã</span><span class="n">o</span> <span class="n">posso</span> <span class="n">criar</span> <span class="n">um</span> <span class="n">produto</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span> <span class="k">do</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;fill_in &#39;Nome&#39;, with: &#39;Meu produto&#39;</span>
+</span><span class='line'><span class="sr">fill_in &#39;Descrição&#39;, with: &#39;&#39;</span>
+</span><span class='line'><span class="sr">click_button &#39;Criar produto&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">expect(page).to have_content(&#39;Descrição é muito curto (mínimo: 15 caracteres)&#39;)</span>
+</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;  end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Poderíamos colocar mais testes, mas não é esse o intuíto do post (Fica de insentivo para você).</p>
 ]]></content>
   </entry>
   
