@@ -423,7 +423,7 @@ No arquivo criado vamos especificar o que desejamos que o nosso cadastro faça. 
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Se rodarmos os testes vamos ter um erro por que o template correspondente a action, não pode ser encontrada, crie um o seguinte arquivo app/views/products/show.html.erb, e adicione o código abaixo:</p>
+<p>Se rodarmos os testes vamos ter um erro por que o template correspondente a action, não pode ser encontrada, crie um o seguinte arquivo <code>app/views/products/show.html.erb</code>, e adicione o código abaixo:</p>
 
 <figure class='code'><figcaption><span>app/views/products/show.html.erb </span></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -433,7 +433,169 @@ No arquivo criado vamos especificar o que desejamos que o nosso cadastro faça. 
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Rodandos os testes, nossa feature vai passar. Se quiser testar manualmente, inicie o servidor com o comando rails s e realize um cadastro.</p>
+<p>Rodandos os testes, nossa feature vai passar. Se quiser testar manualmente, inicie o servidor com o comando <code>rails s</code> e realize um cadastro.</p>
+
+<h2>Adicionando validações aos nossos campos</h2>
+
+<p>Como o nosso cadastro criado e funcionando, devemos adicionar algumas validações
+para os nossos campos. Ao campo <code>nome</code> vamos verificar se ele foi informado,
+se atende o tamanho minímo de 3 caracteres e o máximo de 50 e também, o nome deve
+ser único. Já para o campo <code>descrição</code> verificáremos se foi informado e se possue
+pelo menos 15 carácteres de texto. Nessa etapa, vamos usar testes unitários e testes
+de integração. Os testes unitários vão garantir que as validações estão sendo exigidas
+e o teste integrado deverá validar a operação de cadastro completo.</p>
+
+<h3>Testando unitáriamente nosso model</h3>
+
+<p>Vamos iniciar testando no nosso model <code>Product</code> se algum valor a propriedade name foi
+informado, assim impediremos que o nosso campo tenha um valor em branco. Vamos usar
+a validação de tamanho para impedir o não preenchimento do campo. Adicione o seguinte código de ao arquivo:</p>
+
+<figure class='code'><figcaption><span>spec/models/product_spec.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="nb">require</span> <span class="s1">&#39;rails_helper&#39;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">describe</span> <span class="no">Product</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">before</span> <span class="k">do</span>
+</span><span class='line'>      <span class="vi">@product</span> <span class="o">=</span> <span class="no">Product</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="nb">name</span><span class="p">:</span> <span class="s2">&quot;Cadastro Exemplo&quot;</span><span class="p">,</span>
+</span><span class='line'>        <span class="ss">description</span><span class="p">:</span> <span class="s2">&quot;Descrição do cadastro Exemplo&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">describe</span> <span class="s2">&quot;quando o nome não foi informado&quot;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">before</span> <span class="p">{</span> <span class="vi">@product</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">}</span>
+</span><span class='line'>      <span class="n">it</span> <span class="p">{</span> <span class="n">should_not</span> <span class="n">be_valid</span> <span class="p">}</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">describe</span> <span class="s2">&quot;quando o nome é muito curto&quot;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">before</span> <span class="p">{</span> <span class="vi">@product</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;na&quot;</span><span class="p">}</span>
+</span><span class='line'>      <span class="n">it</span> <span class="p">{</span> <span class="n">should_not</span> <span class="n">be_valid</span> <span class="p">}</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">describe</span> <span class="s2">&quot;quando o nome é muito longo&quot;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">before</span> <span class="p">{</span> <span class="vi">@product</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;n&quot;</span> <span class="o">*</span> <span class="mi">50</span><span class="p">}</span>
+</span><span class='line'>      <span class="n">it</span> <span class="p">{</span> <span class="n">should_not</span> <span class="n">be_valid</span> <span class="p">}</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Rode o comando <code>rspec spec/models/product_spec.rb</code> e o nosso teste deverá falhar,
+pois estamos esperando que algo errado aconteça com o uso dos métodos <code>should_not be_valid</code>,
+mas como não definimos as validações no nosso model, nada de errado ocorre e o nosso teste
+falha. Adicione o código abaixo e rode o comando em seguida, nosso testes deve passar:</p>
+
+<figure class='code'><figcaption><span>app/models/product.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="k">class</span> <span class="nc">Product</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+</span><span class='line'>    <span class="n">validates_length_of</span> <span class="ss">:name</span><span class="p">,</span> <span class="ss">minimum</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="ss">maximum</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span> <span class="n">allow_blank</span><span class="p">:</span> <span class="kp">false</span>
+</span><span class='line'>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>A validação do nome está quase completa, para finalizar adicione ao teste á baixo do último
+bloco describe:</p>
+
+<figure class='code'><figcaption><span>spec/models/product_spec.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="n">describe</span> <span class="s2">&quot;quando o nome de produto já está sendo usado&quot;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">before</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">product_with_same_name</span> <span class="o">=</span> <span class="vi">@product</span><span class="o">.</span><span class="n">dup</span>
+</span><span class='line'>      <span class="n">product_with_same_name</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="vi">@product</span><span class="o">.</span><span class="n">name</span>
+</span><span class='line'>      <span class="n">product_with_same_name</span><span class="o">.</span><span class="n">save</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">it</span> <span class="p">{</span> <span class="n">should_not</span> <span class="n">be_valid</span> <span class="p">}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Usamos o método dup quando queremos duplicar um módelo. Aqui queremos que o nome que já
+exista, não seja duplicado, e é isso que o teste nos assegura. Ao model adicione:</p>
+
+<figure class='code'><figcaption><span>app/models/product.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="n">validates_uniqueness_of</span> <span class="ss">:name</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>E rode o teste novamente. Tudo verde, o campo nome está validado, agora vamos
+validar o campo <code>description</code>. Ao teste insira abaixo do ultimo bloco de describe
+o seguinte código:</p>
+
+<figure class='code'><figcaption><span>spec/models/product_spec.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="n">describe</span> <span class="s2">&quot;quando a descrição não foi informada &quot;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">before</span> <span class="p">{</span> <span class="vi">@product</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="p">}</span>
+</span><span class='line'>    <span class="n">it</span> <span class="p">{</span> <span class="n">should_not</span> <span class="n">be_valid</span> <span class="p">}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">describe</span> <span class="s2">&quot;quando a descrição é muito curta&quot;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">before</span> <span class="p">{</span> <span class="vi">@product</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;n&quot;</span> <span class="o">*</span> <span class="mi">15</span><span class="p">}</span>
+</span><span class='line'>    <span class="n">it</span> <span class="p">{</span> <span class="n">should_not</span> <span class="n">be_valid</span> <span class="p">}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">describe</span> <span class="s2">&quot;quando a descrição é muito longa&quot;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">before</span> <span class="p">{</span> <span class="vi">@product</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;n&quot;</span> <span class="o">*</span> <span class="mi">255</span><span class="p">}</span>
+</span><span class='line'>    <span class="n">it</span> <span class="p">{</span> <span class="n">should_not</span> <span class="n">be_valid</span> <span class="p">}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>E ao nosso modelo insira as validações:</p>
+
+<figure class='code'><figcaption><span>app/models/product.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="n">validates_length_of</span> <span class="ss">:description</span><span class="p">,</span> <span class="ss">minimum</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span> <span class="ss">maximum</span><span class="p">:</span> <span class="mi">255</span><span class="p">,</span> <span class="n">allow_blank</span><span class="p">:</span> <span class="kp">false</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Mas que beleza! Nosso modelo está validando nossos dados e temos a garantia disso
+com os testes unitários, hora de testar integrado e ajustar nossas mensagens.</p>
 </div>
 
 
