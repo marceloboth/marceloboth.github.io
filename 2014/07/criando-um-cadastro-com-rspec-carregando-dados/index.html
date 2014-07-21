@@ -1,0 +1,422 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>CRUD Com Rails - Carregando Cadastros - Personal blog</title>
+  <meta name="author" content="Marcelo J. Both">
+
+  
+  <meta name="description" content="Vamos começar a segunda parte, que será o carregamento dos dados. Iniciaremos mais
+uma vez por nossos testes, então a primeira coisa a fazer é criar &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://marceloboth.github.io/2014/07/criando-um-cadastro-com-rspec-carregando-dados">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Personal blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Personal blog</a></h1>
+  
+    <h2>Web developing.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:marceloboth.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/about-me">About me</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">CRUD Com Rails - Carregando Cadastros</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-07-20T16:10:06-03:00" pubdate data-updated="true">Jul 20<sup>th</sup>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Vamos começar a segunda parte, que será o carregamento dos dados. Iniciaremos mais
+uma vez por nossos testes, então a primeira coisa a fazer é criar o arquivo reading_products_spec.rb
+na pasta de features (<code>spec/features/products/reading_products_spec.rb</code>.</p>
+
+<h2>Acessando a página</h2>
+
+<p>Iniciaremos nosso teste com um cenário onde estaremos navegando até a página,
+então vamos ao trabalho. Implemente a navegação a página de listagem:</p>
+
+<figure class='code'><figcaption><span>spec/features/products/creating_products_spec.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="nb">require</span> <span class="s2">&quot;rails_helper&quot;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">feature</span> <span class="s2">&quot;Listando Produtos&quot;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">scenario</span> <span class="s2">&quot;listando todos os registros cadastrados&quot;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">visit</span> <span class="n">products_path</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">expect</span><span class="p">(</span><span class="n">page</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">have_selector</span><span class="p">(</span><span class="s1">&#39;h2&#39;</span><span class="p">,</span> <span class="ss">text</span><span class="p">:</span> <span class="s1">&#39;Cadastro de produtos&#39;</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Rode o teste com o comando <code>rspec spec/features/products/reading_products_spec.rb</code>,
+teremos um erro, pois ainda não criamos nossa ação index em nosso controlador de
+produtos:</p>
+
+<figure class='code'><figcaption><span>Erro por falta da ação index no controlador </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>  Failures:
+</span><span class='line'>
+</span><span class='line'>  1<span class="o">)</span> Listando Produtos listando todos os registros cadastrados
+</span><span class='line'>     Failure/Error: visit products_path
+</span><span class='line'>     AbstractController::ActionNotFound:
+</span><span class='line'>       The action <span class="s1">&#39;index&#39;</span> could not be found <span class="k">for </span>ProductsController
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>A resolução desse erro é, criar uma ação index no nosso controlador:</p>
+
+<figure class='code'><figcaption><span>app/controller/products_controller.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="k">class</span> <span class="nc">ProductsController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">index</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="o">.</span><span class="n">.</span><span class="o">.</span> <span class="n">demais</span> <span class="n">c</span><span class="err">ó</span><span class="n">digo</span> <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Rodar os testes novamente irá retornar um erro devido a falta do template para
+essa ação:</p>
+
+<figure class='code'><figcaption><span>Erro pela falta de template </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>  Failures:
+</span><span class='line'>
+</span><span class='line'>  1<span class="o">)</span> Listando Produtos listando todos os registros cadastrados
+</span><span class='line'>     Failure/Error: visit products_path
+</span><span class='line'>     ActionView::MissingTemplate:
+</span><span class='line'>       Missing template products/index, application/index with <span class="o">{</span>:locale<span class="o">=</span>&gt;<span class="o">[</span>:<span class="s2">&quot;pt-BR&quot;</span><span class="o">]</span>, :formats<span class="o">=</span>&gt;<span class="o">[</span>:html<span class="o">]</span>, :variants<span class="o">=</span>&gt;<span class="o">[]</span>, :handlers<span class="o">=</span>&gt;<span class="o">[</span>:erb, :builder, :raw, :ruby, :jbuilder, :coffee<span class="o">]}</span>. Searched in:
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Crie o template <code>app/views/products/index.html.erb</code>, com o conteudo:</p>
+
+<figure class='code'><figcaption><span>Adicione o conteudo app/views/products/index.html.erb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="o">&lt;</span><span class="n">h2</span><span class="o">&gt;</span><span class="no">Cadastro</span> <span class="n">de</span> <span class="n">produtos</span><span class="o">&lt;</span><span class="sr">/h2&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Rode o teste novamente e ele irá passar.</p>
+
+<h2>Carregando os dados</h2>
+
+<p>Na página criada vamos carregar os dados. Crie um bloco before, onde estarão os
+trechos de testes que se repetirão. O before já foi utilizado no post anterior,
+mas somente para lembrar&hellip;. o bloco before deve ser usado sempre que se precisa
+que algo seja carregado antes dos testes, assim como é o nosso caso:</p>
+
+<figure class='code'><figcaption><span>spec/features/products/reading_products_spec.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="nb">require</span> <span class="s2">&quot;rails_helper&quot;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">feature</span> <span class="s2">&quot;Listando Produtos&quot;</span> <span class="k">do</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">before</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">visit</span> <span class="n">products_path</span>
+</span><span class='line'>      <span class="n">expect</span><span class="p">(</span><span class="n">page</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">have_selector</span><span class="p">(</span><span class="s1">&#39;h2&#39;</span><span class="p">,</span> <span class="ss">text</span><span class="p">:</span> <span class="s1">&#39;Cadastro de produtos&#39;</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">scenario</span> <span class="s2">&quot;listando todos os registros cadastrados&quot;</span> <span class="k">do</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Agora vamos implementar nosso cenário de carregamento dos dados. Vamos verificar
+se a nossa listagem possui ao menos um registro. Para isso vamos carregar nossa
+factory e então verificar se há ao menos um registro:</p>
+
+<figure class='code'><figcaption><span>Ao menos um registro deve existir spec/features/products/reading_products_spec.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Exibindo os registros</h2>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Marcelo J. Both</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-07-20T16:10:06-03:00" pubdate data-updated="true">Jul 20<sup>th</sup>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/categories/crud/'>crud</a>, <a class='category' href='/categories/iniciante/'>iniciante</a>, <a class='category' href='/categories/rails/'>rails</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://marceloboth.github.io/2014/07/criando-um-cadastro-com-rspec-carregando-dados/" data-via="marceloboth" data-counturl="http://marceloboth.github.io/2014/07/criando-um-cadastro-com-rspec-carregando-dados/" >Tweet</a>
+  
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2014/06/crud-com-rails-criando-um-cadastro-usando-rspec/" title="Previous Post: CRUD com Rails - Criando um cadastro usando Rspec">&laquo; CRUD com Rails - Criando um cadastro usando Rspec</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2014/07/criando-um-cadastro-com-rspec-carregando-dados/">CRUD Com Rails - Carregando Cadastros</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/06/crud-com-rails-criando-um-cadastro-usando-rspec/">CRUD Com Rails - Criando Um Cadastro Usando Rspec</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/06/iniciando-em-ruby-on-rails/">Iniciando Em Ruby on Rails</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/marceloboth">@marceloboth</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'marceloboth',
+            count: 2,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Marcelo J. Both -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'marceloboth';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://marceloboth.github.io/2014/07/criando-um-cadastro-com-rspec-carregando-dados/';
+        var disqus_url = 'http://marceloboth.github.io/2014/07/criando-um-cadastro-com-rspec-carregando-dados/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

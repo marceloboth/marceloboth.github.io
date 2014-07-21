@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Rails | Personal blog]]></title>
+  <link href="http://marceloboth.github.io/categories/rails/atom.xml" rel="self"/>
+  <link href="http://marceloboth.github.io/"/>
+  <updated>2014-07-20T23:40:03-03:00</updated>
+  <id>http://marceloboth.github.io/</id>
+  <author>
+    <name><![CDATA[Marcelo J. Both]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[CRUD Com Rails - Carregando Cadastros]]></title>
+    <link href="http://marceloboth.github.io/2014/07/criando-um-cadastro-com-rspec-carregando-dados/"/>
+    <updated>2014-07-20T16:10:06-03:00</updated>
+    <id>http://marceloboth.github.io/2014/07/criando-um-cadastro-com-rspec-carregando-dados</id>
+    <content type="html"><![CDATA[<p>Vamos começar a segunda parte, que será o carregamento dos dados. Iniciaremos mais
+uma vez por nossos testes, então a primeira coisa a fazer é criar o arquivo reading_products_spec.rb
+na pasta de features (<code>spec/features/products/reading_products_spec.rb</code>.</p>
+
+<h2>Acessando a página</h2>
+
+<p>Iniciaremos nosso teste com um cenário onde estaremos navegando até a página,
+então vamos ao trabalho. Implemente a navegação a página de listagem:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>spec/features/products/creating_products_spec.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="nb">require</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">rails_helper</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;  feature &amp;ldquo;Listando Produtos&amp;rdquo; do&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">scenario</span> <span class="s2">&quot;listando todos os registros cadastrados&quot;</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">visit</span> <span class="n">products_path</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">expect</span><span class="p">(</span><span class="n">page</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">have_selector</span><span class="p">(</span><span class="s1">&#39;h2&#39;</span><span class="p">,</span> <span class="ss">text</span><span class="p">:</span> <span class="s1">&#39;Cadastro de produtos&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'><span class="o">&lt;</span><span class="sr">/code&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Rode o teste com o comando <code>rspec spec/features/products/reading_products_spec.rb</code>,
+teremos um erro, pois ainda não criamos nossa ação index em nosso controlador de
+produtos:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Erro por falta da ação index no controlador </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>  Failures:&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;  1<span class="o">)</span> Listando Produtos listando todos os registros cadastrados&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;pre&gt;&lt;code&gt; Failure/Error: visit products_path
+</span><span class='line'> AbstractController::ActionNotFound:
+</span><span class='line'>   The action <span class="s1">&#39;index&#39;</span> could not be found <span class="k">for </span>ProductsController
+</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>A resolução desse erro é, criar uma ação index no nosso controlador:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/controller/products_controller.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="k">class</span> <span class="nc">ProductsController</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="no">ApplicationController</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;def index</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">... demais código ...</span>
+</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;  end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Rodar os testes novamente irá retornar um erro devido a falta do template para
+essa ação:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Erro pela falta de template </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>  Failures:&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;  1<span class="o">)</span> Listando Produtos listando todos os registros cadastrados&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;pre&gt;&lt;code&gt; Failure/Error: visit products_path
+</span><span class='line'> ActionView::MissingTemplate:
+</span><span class='line'>   Missing template products/index, application/index with <span class="o">{</span>:locale<span class="o">=</span><span class="p">&amp;</span>gt<span class="p">;</span><span class="o">[</span>:<span class="s2">&quot;pt-BR&quot;</span><span class="o">]</span>, :formats<span class="o">=</span><span class="p">&amp;</span>gt<span class="p">;</span><span class="o">[</span>:html<span class="o">]</span>, :variants<span class="o">=</span><span class="p">&amp;</span>gt<span class="p">;</span><span class="o">[]</span>, :handlers<span class="o">=</span><span class="p">&amp;</span>gt<span class="p">;</span><span class="o">[</span>:erb, :builder, :raw, :ruby, :jbuilder, :coffee<span class="o">]}</span>. Searched in:
+</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Crie o template <code>app/views/products/index.html.erb</code>, com o conteudo:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Adicione o conteudo app/views/products/index.html.erb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="o">&lt;</span><span class="n">h2</span><span class="o">&gt;</span><span class="no">Cadastro</span> <span class="n">de</span> <span class="n">produtos</span><span class="o">&lt;</span><span class="sr">/h2&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Rode o teste novamente e ele irá passar.</p>
+
+<h2>Carregando os dados</h2>
+
+<p>Na página criada vamos carregar os dados. Crie um bloco before, onde estarão os
+trechos de testes que se repetirão. O before já foi utilizado no post anterior,
+mas somente para lembrar&hellip;. o bloco before deve ser usado sempre que se precisa
+que algo seja carregado antes dos testes, assim como é o nosso caso:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>spec/features/products/reading_products_spec.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="nb">require</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">rails_helper</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;  feature &amp;ldquo;Listando Produtos&amp;rdquo; do&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">before</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">visit</span> <span class="n">products_path</span>
+</span><span class='line'>  <span class="n">expect</span><span class="p">(</span><span class="n">page</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">have_selector</span><span class="p">(</span><span class="s1">&#39;h2&#39;</span><span class="p">,</span> <span class="ss">text</span><span class="p">:</span> <span class="s1">&#39;Cadastro de produtos&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">scenario</span> <span class="s2">&quot;listando todos os registros cadastrados&quot;</span> <span class="k">do</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'><span class="o">&lt;</span><span class="sr">/code&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Agora vamos implementar nosso cenário de carregamento dos dados. Vamos verificar
+se a nossa listagem possui ao menos um registro. Para isso vamos carregar nossa
+factory e então verificar se há ao menos um registro:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Ao menos um registro deve existir spec/features/products/reading_products_spec.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<h2>Exibindo os registros</h2>
+]]></content>
+  </entry>
+  
+</feed>
