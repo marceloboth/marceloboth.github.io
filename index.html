@@ -241,7 +241,82 @@ factory e então verificar se há ao menos um registro:</p>
 
 <figure class='code'><figcaption><span>Ao menos um registro deve existir spec/features/products/reading_products_spec.rb </span></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="n">scenario</span> <span class="s2">&quot;listando todos os registros cadastrados&quot;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="vi">@product</span> <span class="o">=</span> <span class="no">FactoryGirl</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="ss">:product</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">expect</span><span class="p">(</span><span class="n">page</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">have_content</span><span class="p">(</span><span class="vi">@product</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Tambem adicione na acao index do controlador o seguinte codigo, que carregara os
+dados cadastrados:</p>
+
+<figure class='code'><figcaption><span>Carregando os dados app/controllers/products_controller.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="k">class</span> <span class="nc">ProductsController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">index</span>
+</span><span class='line'>      <span class="vi">@products</span> <span class="o">=</span> <span class="no">Product</span><span class="o">.</span><span class="n">all</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="o">.</span><span class="n">.</span><span class="o">.</span> <span class="no">Demais</span> <span class="n">actions</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p> e o nosso template index ficara assim:</p>
+
+<figure class='code'><figcaption><span>app/views/products/index.html.erb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="o">&lt;</span><span class="n">h2</span><span class="o">&gt;</span><span class="no">Cadastro</span> <span class="n">de</span> <span class="n">produtos</span><span class="o">&lt;</span><span class="sr">/h2&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">  &lt;table&gt;</span>
+</span><span class='line'><span class="sr">    &lt;thead&gt;</span>
+</span><span class='line'><span class="sr">      &lt;tr&gt;Nome&lt;/</span><span class="n">tr</span><span class="o">&gt;</span>
+</span><span class='line'>      <span class="o">&lt;</span><span class="n">tr</span><span class="o">&gt;</span><span class="no">Descricao</span><span class="o">&lt;</span><span class="sr">/tr&gt;</span>
+</span><span class='line'><span class="sr">    &lt;/</span><span class="n">thead</span><span class="o">&gt;</span>
+</span><span class='line'>    <span class="o">&lt;</span><span class="n">tbody</span><span class="o">&gt;</span>
+</span><span class='line'>      <span class="o">&lt;</span><span class="sx">% if </span><span class="o">!</span><span class="vi">@products</span><span class="o">.</span><span class="n">blank?</span> <span class="sx">%&gt;</span>
+</span><span class='line'><span class="sx">        &lt;% @products.each do |product| %&gt;</span>
+</span><span class='line'>          <span class="o">&lt;</span><span class="n">tr</span><span class="o">&gt;</span>
+</span><span class='line'>            <span class="o">&lt;</span><span class="n">td</span><span class="o">&gt;&lt;</span><span class="sx">%= product.name %&gt;&lt;/td&gt;</span>
+</span><span class='line'><span class="sx">            &lt;td&gt;&lt;%=</span> <span class="n">product</span><span class="o">.</span><span class="n">description</span> <span class="sx">%&gt;&lt;/td&gt;</span>
+</span><span class='line'>          <span class="o">&lt;</span><span class="sr">/tr&gt;</span>
+</span><span class='line'><span class="sr">        &lt;% end %&gt;</span>
+</span><span class='line'><span class="sr">      &lt;% else %&gt;</span>
+</span><span class='line'><span class="sr">        Nenhum registro encontrado!</span>
+</span><span class='line'><span class="sr">      &lt;% end %&gt;</span>
+</span><span class='line'><span class="sr">    &lt;/</span><span class="n">tbody</span><span class="o">&gt;</span>
+</span><span class='line'>  <span class="o">&lt;</span><span class="sr">/table&gt;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
