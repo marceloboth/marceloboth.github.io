@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby on Rails | Personal blog]]></title>
   <link href="http://marceloboth.github.io/categories/ruby-on-rails/atom.xml" rel="self"/>
   <link href="http://marceloboth.github.io/"/>
-  <updated>2014-07-21T23:09:47-03:00</updated>
+  <updated>2014-08-24T23:11:36-03:00</updated>
   <id>http://marceloboth.github.io/</id>
   <author>
     <name><![CDATA[Marcelo J. Both]]></name>
@@ -14,292 +14,36 @@
 
   
   <entry>
-    <title type="html"><![CDATA[CRUD Com Rails - Criando Um Cadastro Usando Rspec]]></title>
-    <link href="http://marceloboth.github.io/2014/06/crud-com-rails-criando-um-cadastro-usando-rspec/"/>
-    <updated>2014-06-28T22:22:49-03:00</updated>
-    <id>http://marceloboth.github.io/2014/06/crud-com-rails-criando-um-cadastro-usando-rspec</id>
-    <content type="html"><![CDATA[<p>O acrônimo CRUD (Create, Read, Update e Delete) é algo que todo iniciante em linguagens de programação ou frameworks necessita saber, pois significa nada menos que as operações básicas para a criação/manutenção de cadastros.</p>
+    <title type="html"><![CDATA[Iniciando Em Ruby on Rails Com Testes]]></title>
+    <link href="http://marceloboth.github.io/2014/08/iniciando-em-ruby-on-rails-com-testes/"/>
+    <updated>2014-08-23T10:25:13-03:00</updated>
+    <id>http://marceloboth.github.io/2014/08/iniciando-em-ruby-on-rails-com-testes</id>
+    <content type="html"><![CDATA[<p>Esse post é o primeiro de uma série que irão servir como um próximo passo a quem estiver
+iniciando com Ruby on Rails, algo além de &ldquo;construa um blog em quinze minutos&rdquo; e
+sim algo mais útil ao mundo real.</p>
 
-<p>O nosso primeiro passo é a parte de criação (A letra C do CRUD). Para realizar todos os passos vamos desenvolver usando as metodologias de BDD/TDD, que irá nos possibilitar um código estável e mais fácil de manter.</p>
+<p>Nesse post veremos sobre como gerar nossa aplicação, configurar nossos testes,
+instalar uma biblioteca de front-end e deixar tudo pronto para iniciar o desenvolvimento.</p>
 
-<h2>Criando um cadastro</h2>
+<h1>Criando nossa aplicação</h1>
 
-<p>Nessa primeira história vamos criar um resource (recurso) que representa um produto, é somente para fins demonstrativos, o nome é o que menos interessa. Para o produto vamos ter dois atributos que são necessários: nome e descrição. O nosso primeiro passo é criar a nossa feature de spec, em spec/features (crie esse diretorios se não existirem), crie o diretório products e um arquivo com o nome de creating_products_spec.rb. Use sempre o inglês quando puder em sua aplicação Rails, garanto que você evitará muitas dores de cabeça.
-No arquivo criado vamos especificar o que desejamos que o nosso cadastro faça. Abaixo está o código da especificação:</p>
+<p>Criar a aplicação é um passo simples, onde usaremos os geradores do Rails para
+fazer o trabalho árduo de montar a estrutura e deixar tudo configurado, baseado
+no conceito de &ldquo;Convenção sobre configuração&rdquo;. No terminal, navege até o diretório
+que deseja criar o projeto e digite o seguinte comando:</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>spec/features/products/creating_products_spec.rb </span></figcaption>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Criar o projeto Rails </span></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">spec_helper</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span> <span class="c1"># use ‘rails_helper’ caso esteja usando rails composer&lt;/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="n">feature</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="no">Criando</span> <span class="no">Produtos</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span> <span class="k">do</span>
-</span><span class='line'>  <span class="n">scenario</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">posso</span> <span class="n">criar</span> <span class="n">um</span> <span class="n">produto</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span> <span class="k">do</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;visit &#39;/</span><span class="s1">&#39;</span>
-</span><span class='line'>
-</span><span class='line'><span class="s1">click_link &#39;</span><span class="no">Novo</span> <span class="no">Produto</span><span class="s1">&#39;</span>
-</span><span class='line'>
-</span><span class='line'><span class="s1">fill_in &#39;</span><span class="no">Nome</span><span class="s1">&#39;, with: &#39;</span><span class="no">Produto</span> <span class="mi">1</span><span class="s1">&#39;</span>
-</span><span class='line'><span class="s1">fill_in &#39;</span><span class="no">Descri</span><span class="err">çã</span><span class="n">o</span><span class="s1">&#39;, with: &#39;</span><span class="no">Produto</span> <span class="mi">1</span> <span class="p">(</span><span class="n">um</span><span class="p">)</span><span class="s1">&#39;</span>
-</span><span class='line'><span class="s1">click_button &#39;</span><span class="no">Criar</span> <span class="n">produto</span><span class="s1">&#39;</span>
-</span><span class='line'>
-</span><span class='line'><span class="s1">expect(page).to have_content(&#39;</span><span class="no">Produto</span> <span class="n">foi</span> <span class="n">criado</span><span class="o">.</span><span class="err">&#39;</span><span class="p">)</span>
-</span><span class='line'><span class="o">&lt;</span><span class="sr">/code&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>  rails new crud-rspec -T
 </span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
-<p>Execute o comando rspec spec/features/products/creating_products_spec.rb. Esse comando executará a nossa feature de teste e que apresentará o seguinte erro:</p>
+<blockquote><p>O comando rails new com o argumento -T, é para sinalizar ao gerador, que não queremos
+o conjunto de testes padrão do Rails, já que vamos usar o Rspec. Para ver mais opções
+de configuração utilize o help do comando: <code>rails new -h</code></p></blockquote>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Erro no bash </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;Failures:&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;  1<span class="o">)</span> Criando Produtos posso criar um produto&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;pre&gt;&lt;code&gt;  Failure/Error: click_link <span class="s1">&#39;Novo Produto&#39;</span>
-</span><span class='line'>  Capybara::ElementNotFound:
-</span><span class='line'>    Unable to find link <span class="s2">&quot;Novo Produto&quot;</span>
-</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>Aguarde a finalização da construção&hellip;</p>
 
-<p>O teste falhará pois não temos o link “Novo Produto” na rota “/”, que é a nosso root (página inicial). Então antes de seguir, vamos criar o link na página inicial. Coloque o seguinte código dentro do arquivo <em>navigation_links.html.erb, que está na pasta layouts de nossas views (app/views/layouts/</em>navigation_links.html.erb):</p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/views/layouts/_navigation_links.html.erb </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='erb'><span class='line'><span class="x">  &lt;li&gt;&amp;lt;%= link_to &amp;lsquo;Novo Produto&amp;rsquo;, new_product_path </span><span class="err">%&gt;</span><span class="x">&lt;/li&gt;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>Rode os testes novamente e ocorrera um erro pois não definimos uma rota para os nossos produtos:</p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Erro no bash </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>  Failure/Error: visit <span class="p">&amp;</span>lsquo<span class="p">;</span>/<span class="p">&amp;</span>rsquo<span class="p">;</span>
-</span><span class='line'>  ActionView::Template::Error:&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;pre&gt;&lt;code&gt;undefined <span class="nb">local </span>variable or method <span class="s1">&#39;new_product_path&#39;</span>
-</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>Adicione a rota no arquivo config/routes.rb:</p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>config/routes.rb </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="n">resources</span> <span class="ss">:products</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>Rode os testes novamente e acontecerá um nova quebra na nossa feature. Dessa vez é devido que a nossa suite de testes conseguiu encontrar a rota, mas não encontrou nenhum controller que condize-se com o resource procurado. Veja o erro:</p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Erro no bash </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>  Failure/Error: click_link <span class="p">&amp;</span>lsquo<span class="p">;</span>Novo Produto<span class="p">&amp;</span>rsquo<span class="p">;</span>
-</span><span class='line'>  ActionController::RoutingError:&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;pre&gt;&lt;code&gt;uninitialized constant ProductsController
-</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>Essa ficou fácil. Crie o controller, em app/controllers/products_controller.rb. Nesse arquivo declare um classe ruby com o nome de ProductsController extendendo de ApplicationController:</p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/controllers/products_controller.rb </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">ProductsController</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="no">ApplicationController</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;p&gt;end</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>Rode novamente o teste. Problema resolvido, mas outro surgiu. Agora o rspec não conseguiu encontrar uma action no controller, que refletisse com a operação de novo cadastro. Veja:</p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Ação ainda não existe </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>  Failure/Error: click_link <span class="p">&amp;</span>lsquo<span class="p">;</span>Novo Produto<span class="p">&amp;</span>rsquo<span class="p">;</span>
-</span><span class='line'>  AbstractController::ActionNotFound:&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;pre&gt;&lt;code&gt;The action <span class="s1">&#39;new&#39;</span> could not be found <span class="k">for </span>ProductsController
-</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>Ao controller criado instantes atrás, adicione a action new:</p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Ação de novo cadastro </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">ProductsController</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="no">ApplicationController</span>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">new</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>Se rodarmos novamente os testes, nossa ação é encontrada, porém o template erb não existe, ocasionando outra quebra:</p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Erro pois o template não encontrado </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>  Failure/Error: click_link <span class="p">&amp;</span>lsquo<span class="p">;</span>Novo Produto<span class="p">&amp;</span>rsquo<span class="p">;</span>
-</span><span class='line'>  ActionView::MissingTemplate:&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;pre&gt;&lt;code&gt;  Missing template products/new, application/new with ….
-</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>Devemos criar o nosso template na camada de views do projeto. Então na pasta app/views, crie uma pasta chamada products e nela um arquivo com o nome new.html.erb. Feito isso rode o teste mais uma vez. Agora temos um problema diferente de todos até agora. O Capybara na tentativa de preencher os campos do formulário (que não existe) acaba gerando um novo erro:</p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Não encontrou o elemento Nome </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>  Failure/Error: fill_in <span class="p">&amp;</span>lsquo<span class="p">;</span>Nome<span class="p">&amp;</span>rsquo<span class="p">;</span>, with: <span class="p">&amp;</span>lsquo<span class="p">;</span>Produto 1<span class="p">&amp;</span>rsquo<span class="p">;</span>
-</span><span class='line'>  Capybara::ElementNotFound:&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;pre&gt;&lt;code&gt;   Unable to find field <span class="s2">&quot;Nome&quot;</span>
-</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>Como podemos ver, o Capybara não conseguiu encontrar o elemento com o field “Nome”. Isso é lógico, nós não criamos ainda o formulário com os campos. Porém antes teremos que criar uma instância de Product em nossa controller e passar a nossa view para que ela possua os campos necessários:</p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Implementação da action new </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">new</span>
-</span><span class='line'>  <span class="vi">@product</span> <span class="o">=</span> <span class="no">Product</span><span class="o">.</span><span class="n">new</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>A constante Product  é o nosso model, que deve ser criado em app/models/product.rb. Mas antes de sair criando o arquivo, vamos acelerar as coisas usando um gerador de código do Rails.</p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Comando para gerar tudo relacionado ao model </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>rails g model productect name:string description:string
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>Esse generator (gerador) nos poupa um tempo criando uma série de arquivos, como o arquivo de migração do banco de dados com os campos necessários, nosso model extendendo de ActiveRecord que contém um infinidade de funcionalidades para trabalhar com nossos dados e arquivos de testes unitários.</p>
-
-<p>Um Model deve ser capaz de prover o acesso a camada de dados e é por isso que ele utiliza o Active Record. O Model também provê um local para a lógica de negócio, bem como, fazer validações e associações entre modelos.</p>
-
-<p>Entre os arquivos gerados, está o arquivo de migration. Migration é um mecanismo eficiente de manter um controle de versão de nosso banco de dados, onde podemos evoluir e retrocer nosso schema quando necessário, sem trabalho adicional. Nosso arquivo de migração está é gerado dentro da pasta db/migrate e o nome leva em considereção o timestamp do momento de geração, para nunca ter o mesmo nome e o Rails conseguir controlar o historico de migrações. Nosso arquivo db/migrate/[data]_create_product.rb apresenta o seguite código Ruby:</p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>db/migrate/[data]_create_product.rb </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">CreateProducts</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Migration</span>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">change</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;create_table :products do |t|</span>
-</span><span class='line'><span class="sr">  t.string :name</span>
-</span><span class='line'><span class="sr">  t.string :description</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">  t.timestamps</span>
-</span><span class='line'><span class="sr">end</span>
-</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;p&gt;  end</span>
-</span><span class='line'><span class="sr">end</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>Devemos rodar o comando abaixo para ter o nosso banco de dados atualizado:</p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Comando para atualizar nosso banco de dados </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>rake db:migrate
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>O esquema de nomenclatura é interessante, o Rails irá ter o model com o nome product (singular), no entanto a tabela no banco de dados será products(plural).</p>
-
-<p>Com nosso model product criado e o nosso banco com a tabela necessária, vamos voltar ao formulário. Execute o teste novamente:</p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Rodando os testes </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>rspec spec/features/products/creating_products_spec.rb
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>E veremos que nada mudou desde a ultima execução, porém agora temos nosso banco de dados pronto, e um objeto do tipo Product que dará os atributos necessários para montar nosso formulário de cadastro. Abra o arquivo app/views/products/new.html.erb e adicione o código abaixo:</p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/views/products/new.html.erb </span></figcaption>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Saida da linha de comando </span></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -325,51 +69,117 @@ No arquivo criado vamos especificar o que desejamos que o nosso cadastro faça. 
 <span class='line-number'>23</span>
 <span class='line-number'>24</span>
 <span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-</pre></td><td class='code'><pre><code class='erb'><span class='line'><span class="x">&lt;/p&gt;</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>  rails new crud-rspec -T&lt;/p&gt;
 </span><span class='line'>
-</span><span class='line'><span class="x">&lt;h2&gt;New Product&lt;/h2&gt;</span>
+</span><span class='line'>&lt;pre&gt;&lt;code&gt;  create
+</span><span class='line'>  create  README.rdoc
+</span><span class='line'>  create  Rakefile
+</span><span class='line'>  create  config.ru
+</span><span class='line'>  create  .gitignore
+</span><span class='line'>  create  Gemfile
+</span><span class='line'>  create  app
+</span><span class='line'>  create  app/assets/javascripts/application.js
+</span><span class='line'>  create  app/assets/stylesheets/application.css
 </span><span class='line'>
+</span><span class='line'>  ..................
+</span><span class='line'>  ..................
+</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
 </span><span class='line'>
-</span><span class='line'><span class="x">&lt;p&gt;&amp;lt;%= form_for(@product) do |f| </span><span class="err">%&gt;</span><span class="x"></span>
-</span><span class='line'><span class="x">  &lt;p&gt;&lt;/p&gt;</span>
+</span><span class='line'>&lt;p&gt;  Your bundle is <span class="nb">complete</span>!
+</span><span class='line'>  Use &lt;code&gt;bundle show <span class="o">[</span>gemname<span class="o">]</span>&lt;/code&gt; to see where a bundled gem is installed.&lt;/p&gt;
 </span><span class='line'>
-</span><span class='line'><span class="x">&lt;pre&gt;&lt;code&gt;&amp;lt;%= f.label :name, &quot;Nome&quot; %&amp;gt;&amp;lt;br /&amp;gt;</span>
-</span><span class='line'><span class="x">&amp;lt;%= f.text_field :name %&amp;gt;</span>
-</span><span class='line'><span class="x">&lt;/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>&lt;pre&gt;&lt;code&gt;       run  bundle <span class="nb">exec </span>spring binstub --all
+</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
 </span><span class='line'>
-</span><span class='line'><span class="x">&lt;p&gt;  &lt;/p&gt;</span>
-</span><span class='line'><span class="x">  &lt;p&gt;&lt;/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="x">&lt;pre&gt;&lt;code&gt;&amp;lt;%= f.label :description, &quot;Descrição&quot; %&amp;gt;&amp;lt;br /&amp;gt;</span>
-</span><span class='line'><span class="x">&amp;lt;%= f.text_field :description %&amp;gt;</span>
-</span><span class='line'><span class="x">&lt;/code&gt;&lt;/pre&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="x">&lt;p&gt;  &lt;/p&gt;</span>
-</span><span class='line'><span class="x">  &lt;p&gt;&lt;/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="x">&lt;pre&gt;&lt;code&gt; &amp;lt;%= f.submit &quot;Criar produto&quot; %&amp;gt;</span>
-</span><span class='line'><span class="x">&lt;/code&gt;&lt;/pre&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="x">&lt;p&gt;  &lt;/p&gt;</span>
-</span><span class='line'><span class="x">&amp;lt;% end </span><span class="err">%&gt;</span><span class="x"></span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+</span><span class='line'>&lt;ul&gt;
+</span><span class='line'>&lt;li&gt;bin/rake: spring inserted&lt;/li&gt;
+</span><span class='line'>&lt;li&gt;bin/rails: spring inserted
+</span></code></pre></td></tr></table></div></figure></notextile></div></li>
+</ul>
 
-<p>Formulário criado, devemos rodar nosso teste novamente. Fazendo isso veremos que nesse ponto, o que ocorre é que o formulário é preenchido, porém ao ser submitido, nenhuma ação para criar (create) é encontrado no nosso controller:</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>A ação create não esta definida </span></figcaption>
+<p>No seu bash ou outra ferramenta de linha de comando (recomendo zsh), navegue para
+o diretório que foi criado usando <code>cd crud-rspec</code>. Abra o diretório com o seu editor
+favorito.</p>
+
+<p>O framework Rails nos impõe algumas convenções e uma estrutura inicial para seguir.
+Primeiramente temos o uso de uma arquitetura MVC onde temos nos models, que manipulam
+nossos dados, controllers que gerenciam o que deve ser executado e para onde entregar
+as informações e nossas views que fazem a interação, recebem as entradas e mostram
+as saidas ao usuário. Isso tudo está na pasta <code>app</code> do projeto. Esse é o local onde
+passaremos a maior parte do nosso desenvolvimento. Abaixo uma descrição básica de
+todos os diretórios criados.</p>
+
+<p><code>app</code>: Local do código principal da aplicação. Models, Controllers, Views, Helpers,
+CSS e código Javascript da nossa aplicação ficam nessa pastas.</p>
+
+<p><code>bin</code>: Armazena os scripts dos geradores do <code>rails</code>.</p>
+
+<p><code>config</code>: Configuração do banco de dados, intenacionalizações, especificidades de
+algumas gems (Devise,SimpleForm, etc), rotas da aplicação e muitas outras definições.</p>
+
+<p><code>db</code>: Mantém o esquema e as migrações da base de dados.</p>
+
+<p><code>lib</code>: Aqui ficam todos os códigos que não são diretamente ligados a aplicação.
+São armazenadas as tarefas <code>rake</code>, bem como tasks que são executadas fora do ambiente
+web.</p>
+
+<p><code>log</code>: Arquivos de log, simples assim :).</p>
+
+<p><code>public</code>: Páginas de erro (404, 500) e arquivos estáticos como por exemplo o favicon.ico
+e o robots.txt.</p>
+
+<p><code>tmp</code>: Guarda o cache e PID da aplicação.</p>
+
+<p><code>vendor</code>: Local onde são colocadas bibliotecas que não sejam gems.</p>
+
+<p>A construtor de projetos do Rails poupa a nós um bom tempo, pois não precisamos nos preocupar
+com a arquitetura inicial do projeto, pois ele que cria as pastas e arquivos, de acordo
+com a nossas escolhas.</p>
+
+<h1>Configurar nossos testes</h1>
+
+<p>Vamos iniciar a configuração dos nossos testes. Primeiro passo é instalar a gem
+de testes <a href="http://rspec.info/">Rspec</a> e a gem para testes de aceitação
+<a href="http://jnicklas.github.io/capybara/">Capybara</a>, pra isso devemos adicionar elas ao nosso
+arquivo Gemfile, e devemos definir a qual grupo de gems elas pertencem (desenvolvimento, testes ou produção). Como
+nossos testes apenas são usados em teste e produção, ficará de seguinte maneira:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Adicione as gems ao Gemfile </span></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>Failure/Error: click_button <span class="p">&amp;</span>lsquo<span class="p">;</span>Criar produto<span class="p">&amp;</span>rsquo<span class="p">;</span>
-</span><span class='line'>AbstractController::ActionNotFound:
-</span><span class='line'>  The action <span class="p">&amp;</span>lsquo<span class="p">;</span>create<span class="p">&amp;</span>rsquo<span class="p">;</span> could not be found <span class="k">for </span>ProductsController
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="n">group</span> <span class="ss">:development</span><span class="p">,</span> <span class="ss">:test</span> <span class="k">do</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;gem &#39;rspec-rails&#39;</span>
+</span><span class='line'><span class="sr">gem &#39;capybara&#39;</span>
+</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;  end</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
-<p>Então para resolver isso devemos criar o nosso método create dentro do ProductContoller:</p>
+<p>em seguida execute o camando de instalação de gems no terminal:</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Definindo a action create </span></figcaption>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Execute o comando </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>  bundle install
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Após instalada as gems, vamos gerar os arquivos de configuração do rspec e
+também os diretórios que servem de base para criar nossos testes:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Gerar configs </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>  rails generate rspec:install
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Se observarmos a saída do nosso console</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Saída do console </span></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -379,216 +189,62 @@ No arquivo criado vamos especificar o que desejamos que o nosso cadastro faça. 
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">create</span>
-</span><span class='line'>  <span class="vi">@product</span> <span class="o">=</span> <span class="no">Product</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">product_params</span><span class="p">)</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>  rails generate rspec:install&lt;/p&gt;
 </span><span class='line'>
-</span><span class='line'><span class="sr">&lt;p&gt;  if @product.save&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>&lt;pre&gt;&lt;code&gt;  create  .rspec
+</span><span class='line'>  create  spec
+</span><span class='line'>  create  spec/spec_helper.rb
+</span><span class='line'>  create  spec/rails_helper.rb
+</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
 </span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">redirect_to</span> <span class="vi">@product</span><span class="p">,</span> <span class="ss">notice</span><span class="p">:</span> <span class="s2">&quot;Produto foi criado.&quot;</span>
-</span><span class='line'><span class="o">&lt;</span><span class="sr">/code&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="k">else</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;flash[:alert] = &quot;Produto não pode ser criado.&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">render &quot;new&quot;</span>
-</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;p&gt;  end</span>
-</span><span class='line'><span class="sr">end</span>
+</span><span class='line'>&lt;p&gt;
 </span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
-<p>Também defina um  método privado para permitir que nossos parametros sejam lidos, sem serem bloqueados pelo mecanismo de Strong Parameters do Rails 4:</p>
+<p>veremos que o diretório rspec foi gerado, e os arquivos de configuração também.</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Adicionando os campos permitidos </span></figcaption>
+<h1>Are you ready?</h1>
+
+<p>Criamos nosso projeto e também configuramos o rspec, poderiamos implementar nossa
+primeira funcionalidade, mas antes, vamos configurar uma biblioteca de front-end, no caso
+twitter bootstrap. Para isso adicione a gem do twitter bootstrap em nosso Gemfile:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Adicione ao Gemfile </span></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="kp">private</span>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">product_params</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;params.require(:product).permit(:name, :description)</span>
-</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;p&gt;  end</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="n">gem</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">bootstrap</span><span class="o">-</span><span class="n">sass</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">gem</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">autoprefixer</span><span class="o">-</span><span class="n">rails</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
-<p>Rode seu teste e ele ira dizer que não encontrou a action show. Isso quer dizer que o nosso cadastro está sendo salvo, porém não temos uma ação para fazer a exibição de cadastro. Adicione a ação show ao seu ProductController:</p>
+<p>Rode novamente o <code>bundle install</code> para instalar a gem e na seqüência configure, da seguinte
+maneira:</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Nossa ação para busca e exibir o usuário </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<ul>
+<li><p>Renomeie o arquivo app/assets/stylesheets/application.css para app/assets/stylesheets/application.css.scss</p></li>
+<li><p>Adicione ao arquivo application.css.scss:</p></li>
+</ul>
+
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">show</span>
-</span><span class='line'>  <span class="vi">@product</span> <span class="o">=</span> <span class="no">Product</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:id</span><span class="o">]</span><span class="p">)</span>
-</span><span class='line'><span class="k">end</span>
+</pre></td><td class='code'><pre><code class='css'><span class='line'>  <span class="k">@import</span> <span class="o">&amp;</span><span class="nt">ldquo</span><span class="p">;</span><span class="nt">bootstrap-sprockets</span><span class="o">&amp;</span><span class="nt">rdquo</span><span class="o">;;</span>
+</span><span class='line'>  <span class="k">@import</span> <span class="o">&amp;</span><span class="nt">ldquo</span><span class="p">;</span><span class="nt">bootstrap</span><span class="o">&amp;</span><span class="nt">rdquo</span><span class="o">;;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
-<p>Se rodarmos os testes vamos ter um erro por que o template correspondente a action, não pode ser encontrada, crie um o seguinte arquivo <code>app/views/products/show.html.erb</code>, e adicione o código abaixo:</p>
+<ul>
+<li><p>Adicione ao app/assets/javascript/application.js <code>//= require bootstrap-sprockets</code></p></li>
+<li><p>Crie um controller com uma view para servir como o Index de nossa Web Application:</p></li>
+</ul>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/views/products/show.html.erb </span></figcaption>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Crie o controlle e a view </span></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&lt;</span><span class="sr">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;h2&gt;&lt;%= @product.name %&gt;&lt;/</span><span class="n">h2</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;&lt;</span><span class="nb">p</span><span class="o">&gt;&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">%=</span> <span class="vi">@product</span><span class="o">.</span><span class="n">description</span> <span class="sx">%&gt;&lt;/p&gt;</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>  rails g controller home index
 </span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
-<p>Rodandos os testes, nossa feature vai passar. Se quiser testar manualmente, inicie o servidor com o comando <code>rails s</code> e realize um cadastro.</p>
+<p>Isso criará uma série de arquivos, que são: o nosso controller, nossa view, arquivos
+de css e javascript, testes e também é feita uma alteração em nosso arquivo de rotas:</p>
 
-<h2>Adicionando validações aos nossos campos</h2>
-
-<p>Como o nosso cadastro criado e funcionando, devemos adicionar algumas validações
-para os nossos campos. Ao campo <code>nome</code> vamos verificar se ele foi informado,
-se atende o tamanho minímo de 3 caracteres e o máximo de 50 e também, o nome deve
-ser único. Já para o campo <code>descrição</code> verificáremos se foi informado e se possue
-pelo menos 15 carácteres de texto. Nessa etapa, vamos usar testes unitários e testes
-de integração. Os testes unitários vão garantir que as validações estão sendo exigidas
-e o teste integrado deverá validar a operação de cadastro completo.</p>
-
-<h3>Testando unitáriamente nosso model</h3>
-
-<p>Vamos iniciar testando no nosso model <code>Product</code> se algum valor a propriedade name foi
-informado, assim impediremos que o nosso campo tenha um valor em branco. Vamos usar
-a validação de tamanho para impedir o não preenchimento do campo. Adicione o seguinte código de ao arquivo:</p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>spec/models/product_spec.rb </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="nb">require</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">rails_helper</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;p&gt;  describe Product do&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">before</span> <span class="k">do</span>
-</span><span class='line'>  <span class="vi">@product</span> <span class="o">=</span> <span class="no">Product</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="nb">name</span><span class="p">:</span> <span class="s2">&quot;Cadastro Exemplo&quot;</span><span class="p">,</span>
-</span><span class='line'>    <span class="ss">description</span><span class="p">:</span> <span class="s2">&quot;Descrição do cadastro Exemplo&quot;</span><span class="p">)</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">describe</span> <span class="s2">&quot;quando o nome não foi informado&quot;</span> <span class="k">do</span>
-</span><span class='line'>  <span class="n">before</span> <span class="p">{</span> <span class="vi">@product</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">}</span>
-</span><span class='line'>  <span class="n">it</span> <span class="p">{</span> <span class="n">should_not</span> <span class="n">be_valid</span> <span class="p">}</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">describe</span> <span class="s2">&quot;quando o nome é muito curto&quot;</span> <span class="k">do</span>
-</span><span class='line'>  <span class="n">before</span> <span class="p">{</span> <span class="vi">@product</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;na&quot;</span><span class="p">}</span>
-</span><span class='line'>  <span class="n">it</span> <span class="p">{</span> <span class="n">should_not</span> <span class="n">be_valid</span> <span class="p">}</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">describe</span> <span class="s2">&quot;quando o nome é muito longo&quot;</span> <span class="k">do</span>
-</span><span class='line'>  <span class="n">before</span> <span class="p">{</span> <span class="vi">@product</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;n&quot;</span> <span class="o">*</span> <span class="mi">50</span><span class="p">}</span>
-</span><span class='line'>  <span class="n">it</span> <span class="p">{</span> <span class="n">should_not</span> <span class="n">be_valid</span> <span class="p">}</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'><span class="o">&lt;</span><span class="sr">/code&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>Rode o comando <code>rspec spec/models/product_spec.rb</code> e o nosso teste deverá falhar,
-pois estamos esperando que algo errado aconteça com o uso dos métodos <code>should_not be_valid</code>,
-mas como não definimos as validações no nosso model, nada de errado ocorre e o nosso teste
-falha. Adicione o código abaixo e rode o comando em seguida, nosso testes deve passar:</p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/models/product.rb </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="k">class</span> <span class="nc">Product</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;validates_length_of :name, minimum: 5, maximum: 50, allow_blank: false</span>
-</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;p&gt;  end</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>A validação do nome está quase completa, para finalizar adicione ao teste á baixo do último
-bloco describe:</p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>spec/models/product_spec.rb </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="n">describe</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">quando</span> <span class="n">o</span> <span class="n">nome</span> <span class="n">de</span> <span class="n">produto</span> <span class="n">j</span><span class="err">á</span> <span class="n">est</span><span class="err">á</span> <span class="n">sendo</span> <span class="n">usado</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span> <span class="k">do</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;before do</span>
-</span><span class='line'><span class="sr">  product_with_same_name = @product.dup</span>
-</span><span class='line'><span class="sr">  product_with_same_name.name = @product.name</span>
-</span><span class='line'><span class="sr">  product_with_same_name.save</span>
-</span><span class='line'><span class="sr">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">it { should_not be_valid }</span>
-</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;p&gt;  end</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>Usamos o método dup quando queremos duplicar um módelo. Aqui queremos que o nome que já
-exista, não seja duplicado, e é isso que o teste nos assegura. Ao model adicione:</p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/models/product.rb </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="n">validates_uniqueness_of</span> <span class="ss">:name</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>E rode o teste novamente. Tudo verde, o campo nome está validado, agora vamos
-validar o campo <code>description</code>. Ao teste insira abaixo do ultimo bloco de describe
-o seguinte código:</p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>spec/models/product_spec.rb </span></figcaption>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Arquivos gerados </span></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -612,48 +268,42 @@ o seguinte código:</p>
 <span class='line-number'>21</span>
 <span class='line-number'>22</span>
 <span class='line-number'>23</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="n">describe</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">quando</span> <span class="n">a</span> <span class="n">descri</span><span class="err">çã</span><span class="n">o</span> <span class="n">n</span><span class="err">ã</span><span class="n">o</span> <span class="n">foi</span> <span class="n">informada</span> <span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span> <span class="k">do</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>  rails g controller home index&lt;/p&gt;
 </span><span class='line'>
-</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;before { @product.description = &quot;&quot; }</span>
-</span><span class='line'><span class="sr">it { should_not be_valid }</span>
-</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
+</span><span class='line'>&lt;pre&gt;&lt;code&gt;  create  app/controllers/home_controller.rb
+</span><span class='line'>   route  get <span class="s1">&#39;home/index&#39;</span>
+</span><span class='line'>  invoke  erb
+</span><span class='line'>  create    app/views/home
+</span><span class='line'>  create    app/views/home/index.html.erb
+</span><span class='line'>  invoke  rspec
+</span><span class='line'>  create    spec/controllers/home_controller_spec.rb
+</span><span class='line'>  create    spec/views/home
+</span><span class='line'>  create    spec/views/home/index.html.erb_spec.rb
+</span><span class='line'>  invoke  helper
+</span><span class='line'>  create    app/helpers/home_helper.rb
+</span><span class='line'>  invoke    rspec
+</span><span class='line'>  create      spec/helpers/home_helper_spec.rb
+</span><span class='line'>  invoke  assets
+</span><span class='line'>  invoke    coffee
+</span><span class='line'>  create      app/assets/javascripts/home.js.coffee
+</span><span class='line'>  invoke    scss
+</span><span class='line'>  create      app/assets/stylesheets/home.css.scss
+</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
 </span><span class='line'>
-</span><span class='line'><span class="sr">&lt;p&gt;  end&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="n">describe</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">quando</span> <span class="n">a</span> <span class="n">descri</span><span class="err">çã</span><span class="n">o</span> <span class="err">é</span> <span class="n">muito</span> <span class="n">curta</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span> <span class="k">do</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;before { @product.name = &quot;n&quot; * 15}</span>
-</span><span class='line'><span class="sr">it { should_not be_valid }</span>
-</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;p&gt;  end&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="n">describe</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">quando</span> <span class="n">a</span> <span class="n">descri</span><span class="err">çã</span><span class="n">o</span> <span class="err">é</span> <span class="n">muito</span> <span class="n">longa</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span> <span class="k">do</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;before { @product.name = &quot;n&quot; * 255}</span>
-</span><span class='line'><span class="sr">it { should_not be_valid }</span>
-</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;p&gt;  end</span>
+</span><span class='line'>&lt;p&gt;
 </span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
-<p>E ao nosso modelo insira as validações:</p>
+<h1>Nosso primeiro teste</h1>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/models/product.rb </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="n">validates_length_of</span> <span class="ss">:description</span><span class="p">,</span> <span class="ss">minimum</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span> <span class="ss">maximum</span><span class="p">:</span> <span class="mi">255</span><span class="p">,</span> <span class="n">allow_blank</span><span class="p">:</span> <span class="kp">false</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>Agora que temos nossa estrutura gerada, nossos testes configurados e nosso front-end
+pronto, vamos definir a nossa página principal. Nosso primeiro passo é definir que
+a nossa rota raiz da aplicação seja o index do controlador home. Com isso feito vamos
+colocar um menu superior na página e um link para o cadastro de produtos que será implementado
+no próximo post. Crie um diretório denominado <code>features</code> dentro do diretório <code>spec</code>,
+e dentro da pasta criada crie um arquivo chamado <code>reading_products_spec.rb</code>.
+Nesse arquivo implemente o teste da seguinte maneira:</p>
 
-<p>Mas que beleza! Nosso modelo está validando nossos dados e temos a garantia disso
-com os testes unitários, hora de testar integrado e ajustar nossas mensagens.</p>
-
-<h2>Testando de maneira integrada</h2>
-
-<p>Antes de continuar a implementação, vamos refatorar a nossa spec feature <code>spec/features/products/creating_products_spec.rb</code>. Vamos adicionar um bloco <code>before</code>,
-e nele vamos colocar o que estará repetindo nos outros cenários, nossa feature deve ser
-semelhante a isso:</p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>spec/features/products/creating_products_spec.rb </span></figcaption>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Escrevendo nosso teste spec/features/reading_products_spec.rb </span></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -664,45 +314,24 @@ semelhante a isso:</p>
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="nb">require</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">rails_helper</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="nb">require</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">rails_helper</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="sr">&lt;p&gt;  feature &amp;lsquo;Criando Produtos&amp;rsquo; do&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'><span class="sr">&lt;p&gt;  feature &amp;ldquo;Listando Produtos&amp;rdquo; do&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">before</span> <span class="k">do</span>
-</span><span class='line'>  <span class="n">visit</span> <span class="s1">&#39;/&#39;</span>
-</span><span class='line'>  <span class="n">click_link</span> <span class="s1">&#39;Novo Produto&#39;</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">scenario</span> <span class="s2">&quot;posso criar um produto&quot;</span> <span class="k">do</span>
-</span><span class='line'>  <span class="n">fill_in</span> <span class="s1">&#39;Nome&#39;</span><span class="p">,</span> <span class="ss">with</span><span class="p">:</span> <span class="s1">&#39;Produto 1&#39;</span>
-</span><span class='line'>  <span class="n">fill_in</span> <span class="s1">&#39;Descrição&#39;</span><span class="p">,</span> <span class="ss">with</span><span class="p">:</span> <span class="s1">&#39;Produto 1 (um)&#39;</span>
-</span><span class='line'>  <span class="n">click_button</span> <span class="s1">&#39;Criar produto&#39;</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">expect</span><span class="p">(</span><span class="n">page</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">have_content</span><span class="p">(</span><span class="s1">&#39;Produto foi criado.&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">it</span> <span class="s2">&quot;consigo acessar o link da página&quot;</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">visit</span> <span class="n">root_path</span>
 </span><span class='line'><span class="k">end</span>
 </span><span class='line'><span class="o">&lt;</span><span class="sr">/code&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
 </span><span class='line'>
 </span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
-<p>Rode a spec com o comando <code>rspec spec/features/products/creating_products_spec.rb</code>, seu primeiro
-cenário deverá falhar. Agora estamos validando nossos campos, e a nossa descrição não está
-no tamanho correto, corrija, colocando uma descrição com pelo menos 15 caracteres, rode o teste
-novamente e tudo estará correto.</p>
+<p>Antes de rodar o teste, desabilite o lançamento de warnings do rspec. Faça isso
+removendo a linha que contém o conteúdo <code>--warnings</code> do aquivo .rspec que está na raiz do projeto.
+Agora rode o teste com o comando <code>rspec spec/features/reading_products_spec.rb</code>. Um erro
+ocorrerá:</p>
 
-<p>Vamos agora focar nos cenários de teste negativo. Primeiro para valores do campo nome.
-Crie um novo cenário abaixo do último criado, como o seguinte código:</p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>insira em spec/features/products/creating_products_spec.rb </span></figcaption>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Erro ocorrido </span></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -711,26 +340,40 @@ Crie um novo cenário abaixo do último criado, como o seguinte código:</p>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="n">scenario</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">com</span> <span class="n">nome</span> <span class="n">inv</span><span class="err">á</span><span class="n">lido</span> <span class="n">n</span><span class="err">ã</span><span class="n">o</span> <span class="n">posso</span> <span class="n">criar</span> <span class="n">um</span> <span class="n">produto</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span> <span class="k">do</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>  1<span class="o">)</span> Listando Produtos consigo acessar o link da página&lt;/p&gt;
 </span><span class='line'>
-</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;fill_in &#39;Nome&#39;, with: &#39;&#39;</span>
-</span><span class='line'><span class="sr">fill_in &#39;Descrição&#39;, with: &#39;Produto com uma bela descrição de teste&#39;</span>
-</span><span class='line'><span class="sr">click_button &#39;Criar produto&#39;</span>
+</span><span class='line'>&lt;pre&gt;&lt;code&gt; Failure/Error: visit root_path
+</span><span class='line'> NameError:
+</span><span class='line'>   undefined <span class="nb">local </span>variable or method <span class="sb">`</span>root_path<span class="err">&#39;</span> <span class="k">for</span> <span class="c">#&amp;lt;RSpec::ExampleGroups::ListandoProdutos:0xa824e84&amp;gt;</span>
+</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
 </span><span class='line'>
-</span><span class='line'><span class="sr">expect(page).to have_content(&#39;Nome é muito curto (mínimo: 5 caracteres)&#39;)</span>
+</span><span class='line'>&lt;p&gt;
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Esse erro acontece pois estamos tentando visitar a raiz de nosso site e ela ainda não
+está configurada nas rotas. Abra o arquivo <code>config/routes.rb</code>, e deixe a sua implementação
+na seguinte forma:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Defina o root_path config/routes.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="no">Rails</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">routes</span><span class="o">.</span><span class="n">draw</span> <span class="k">do</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;root &#39;home#index&#39;</span>
 </span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
 </span><span class='line'>
 </span><span class='line'><span class="sr">&lt;p&gt;  end</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
-<p>Se rodar o teste, irá falhar, pois essa mensagem não está sendo exibida. Vamos criar
-um arquivo, na pasta shared de nossas views, com o nome de <em>errors.html.erb
-(app/views/shared/</em>errors.html.erb). Será um <code>partial</code>, que irá exibir todos os
-erros de validação.</p>
+<p>Salve e rode o teste novamente. Nosso teste passou, vamos a mais uma parte da implementação,
+que é onde vamos colocar o cabeçalho e o link para o recurso de listagem de cadastros.
+Ao teste adicione:</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>insira em app/views/shared/_errors.html.erb </span></figcaption>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Encontrando o link de listagem spec/features/reading_products_spec.rb </span></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -740,32 +383,22 @@ erros de validação.</p>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">%</span> <span class="k">if</span> <span class="n">object</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">any?</span> <span class="sx">%&gt;</span>
-</span><span class='line'><span class="sx">  &lt;div id=&quot;error_explanation&quot;&gt;</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="n">feature</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="no">Listando</span> <span class="no">Produtos</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span> <span class="k">do</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;&amp;lt;div class=&quot;alert alert-error&quot;&amp;gt;</span>
-</span><span class='line'><span class="sr">  O formulário contém &amp;lt;%= pluralize(object.errors.count, &quot;erro&quot;) %&amp;gt;.</span>
-</span><span class='line'><span class="sr">&amp;lt;/</span><span class="n">div</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span>
-</span><span class='line'><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="n">ul</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span>
-</span><span class='line'>  <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">%</span> <span class="n">object</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">full_messages</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">msg</span><span class="o">|</span> <span class="sx">%&amp;gt;</span>
-</span><span class='line'><span class="sx">  &amp;</span><span class="n">lt</span><span class="p">;</span><span class="n">li</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span><span class="o">*</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">%=</span> <span class="n">msg</span> <span class="sx">%&amp;gt;&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">/</span><span class="n">li</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span>
-</span><span class='line'>  <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">%</span> <span class="k">end</span> <span class="sx">%&amp;gt;</span>
-</span><span class='line'><span class="sx">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">/</span><span class="n">ul</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span>
-</span><span class='line'><span class="o">&lt;</span><span class="sr">/code&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;it &quot;consigo acessar o link da página&quot; do</span>
+</span><span class='line'><span class="sr">  visit root_path</span>
+</span><span class='line'><span class="sr">  expect(page).to have_link(&#39;Produtos&#39;)</span>
+</span><span class='line'><span class="sr">end</span>
+</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="o">&lt;</span><span class="sr">/div&gt;</span>
-</span><span class='line'><span class="sr">  &amp;lt;% end %&gt;</span>
+</span><span class='line'><span class="sr">&lt;p&gt;  end</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
-<p>Também deve-se incluir esse arquivo no formulário de cadastro:</p>
+<p>Rodando nosso teste, teremos uma quebra, pois esse link não existe em nossa página
+inicial. Vamos colocar um menu, com o conjunto de estilos do Twitter Bootstrap a
+nossa página de layout <code>app/views/layouts/application.html.erb</code>:</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>altere em app/views/products/new.html.erb </span></figcaption>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Implemente a página de layout app/views/layouts/application.html.erb </span></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -785,138 +418,44 @@ erros de validação.</p>
 <span class='line-number'>17</span>
 <span class='line-number'>18</span>
 <span class='line-number'>19</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="o">&lt;</span><span class="n">h2</span><span class="o">&gt;</span><span class="no">New</span> <span class="no">Product</span><span class="o">&lt;</span><span class="sr">/h2&gt;&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class='erb'><span class='line'><span class="x">  &lt;body&gt;&lt;/p&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="sx">%= form_for(@product) do |f| %&gt;&lt;/p&gt;</span>
+</span><span class='line'><span class="x">&lt;pre&gt;&lt;code&gt;&amp;lt;div class=&quot;navbar navbar-inverse navbar-fixed-top&quot; role=&quot;navigation&quot;&amp;gt;</span>
+</span><span class='line'><span class="x">  &amp;lt;div class=&quot;container&quot;&amp;gt;</span>
+</span><span class='line'><span class="x">    &amp;lt;div class=&quot;navbar-header&quot;&amp;gt;</span>
+</span><span class='line'><span class="x">      &amp;lt;a class=&quot;navbar-brand&quot; href=&quot;#&quot;&amp;gt;Crud com RSPEC - Uhuu!&amp;lt;/a&amp;gt;</span>
+</span><span class='line'><span class="x">    &amp;lt;/div&amp;gt;</span>
+</span><span class='line'><span class="x">    &amp;lt;div class=&quot;collapse navbar-collapse&quot;&amp;gt;</span>
+</span><span class='line'><span class="x">      &amp;lt;ul class=&quot;nav navbar-nav&quot;&amp;gt;</span>
+</span><span class='line'><span class="x">        &amp;lt;li class=&quot;active&quot;&amp;gt;&amp;lt;a href=&quot;#&quot;&amp;gt;Início&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;</span>
+</span><span class='line'><span class="x">        &amp;lt;li&amp;gt;&amp;lt;a href=&quot;#about&quot;&amp;gt;Produtos&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;</span>
+</span><span class='line'><span class="x">      &amp;lt;/ul&amp;gt;</span>
+</span><span class='line'><span class="x">    &amp;lt;/div&amp;gt;</span>
+</span><span class='line'><span class="x">  &amp;lt;/div&amp;gt;</span>
+</span><span class='line'><span class="x">&amp;lt;/div&amp;gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="sx">&lt;pre&gt;&lt;code&gt;&amp;lt;%=</span> <span class="n">render</span> <span class="s1">&#39;shared/errors&#39;</span><span class="p">,</span> <span class="ss">object</span><span class="p">:</span> <span class="n">f</span><span class="o">.</span><span class="n">object</span> <span class="sx">%&amp;gt;</span>
-</span><span class='line'><span class="sx">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="nb">p</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span>
-</span><span class='line'>  <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="sx">%= f.label :name, &quot;Nome&quot; %&amp;gt;&amp;lt;br /&amp;gt;</span>
-</span><span class='line'><span class="sx">  &amp;lt;%=</span> <span class="n">f</span><span class="o">.</span><span class="n">text_field</span> <span class="ss">:name</span> <span class="sx">%&amp;gt;</span>
-</span><span class='line'><span class="sx">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">/</span><span class="nb">p</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span>
-</span><span class='line'><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="nb">p</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span>
-</span><span class='line'>  <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="sx">%= f.label :description, &quot;Descrição&quot; %&amp;gt;&amp;lt;br /&amp;gt;</span>
-</span><span class='line'><span class="sx">  &amp;lt;%=</span> <span class="n">f</span><span class="o">.</span><span class="n">text_field</span> <span class="ss">:description</span> <span class="sx">%&amp;gt;</span>
-</span><span class='line'><span class="sx">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">/</span><span class="nb">p</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span>
-</span><span class='line'><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="nb">p</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span>
-</span><span class='line'>  <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">%=</span> <span class="n">f</span><span class="o">.</span><span class="n">submit</span> <span class="s2">&quot;Criar produto&quot;</span> <span class="sx">%&amp;gt;</span>
-</span><span class='line'><span class="sx">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">/</span><span class="nb">p</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span>
-</span><span class='line'><span class="o">&lt;</span><span class="sr">/code&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'><span class="x">&amp;lt;div class=&quot;container&quot;&amp;gt;</span>
+</span><span class='line'><span class="x">  &amp;lt;%= yield %&amp;gt;</span>
+</span><span class='line'><span class="x">&amp;lt;/div&amp;gt;</span>
+</span><span class='line'><span class="x">&lt;/code&gt;&lt;/pre&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">%</span> <span class="k">end</span> <span class="o">%&gt;</span>
+</span><span class='line'><span class="x">&lt;p&gt;  &lt;/body&gt;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
-<p>Podemos rodar nosso teste novamente, e teremos ainda algum erro, mas estamos quase.
-Precisamos ajustar para que nossos atributos (name e description) sejam reconhecidos
-como nome e descrição. Basta mudar no nosso arquivo de tradução  em <code>config/locales/pt-BR/pt-BR.yml</code></p>
+<p>Rode os testes novamente, agora tudo vai passar. Temos nossa página inicial definida,
+com o uso de testes de integração. O que fizemos foi, adicionar uma rota raiz para
+nossa aplicação, colocar um menu e um link para o cadastro de produtos (que está sem caminho),
+e tudo isso guiado por testes, usando Rspec e Capybara.</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>adicione em config/locales/pt-BR/pt-BR.yml </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='yaml'><span class='line'>  <span class="l-Scalar-Plain">activerecord:&lt;/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="l-Scalar-Plain">&lt;pre&gt;&lt;code&gt;models</span><span class="p-Indicator">:</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">product</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Produto</span>
-</span><span class='line'><span class="l-Scalar-Plain">attributes</span><span class="p-Indicator">:</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">product</span><span class="p-Indicator">:</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Nome</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">description</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Descrição</span>
-</span><span class='line'><span class="l-Scalar-Plain">&lt;/code&gt;&lt;/pre&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="l-Scalar-Plain">&lt;p&gt;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>Finalizamos nossa primeira parte, onde configuramos nossa aplicação com algumas
+ferramentas que o Rails e o Ruby nos proporcionam para desenvolvermos com Agilidade
+sem perder qualidade. Nos próximos posts vamos implementar um Crud usando Rspec, Capybara e Rails.</p>
 
-<p>Dessa maneira podemos traduzir tudo que o active record gera automáticamente, é uma maneira
-muito flexível de se traduzir o nosso sistema. Rode novamente os testes e dessa vez, nossa
-spec passou. Hora de refatorar. Agora que colocamos a tradução dos campos do active record,
-não precisamos mais a tradução que está fixa nos campos do formulário de cadastro. Remova
-a tradução:</p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>remova a tradução em app/views/products/new.html.erb </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="o">&lt;</span><span class="n">h2</span><span class="o">&gt;</span><span class="no">New</span> <span class="no">Product</span><span class="o">&lt;</span><span class="sr">/h2&gt;&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="sx">%= form_for(@product) do |f| %&gt;&lt;/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sx">&lt;pre&gt;&lt;code&gt;&amp;lt;%=</span> <span class="n">render</span> <span class="s1">&#39;shared/errors&#39;</span><span class="p">,</span> <span class="ss">object</span><span class="p">:</span> <span class="n">f</span><span class="o">.</span><span class="n">object</span> <span class="sx">%&amp;gt;</span>
-</span><span class='line'><span class="sx">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="nb">p</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span>
-</span><span class='line'>  <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="sx">%= f.label :name %&amp;gt;&amp;lt;br /&amp;gt;</span>
-</span><span class='line'><span class="sx">  &amp;lt;%=</span> <span class="n">f</span><span class="o">.</span><span class="n">text_field</span> <span class="ss">:name</span> <span class="sx">%&amp;gt;</span>
-</span><span class='line'><span class="sx">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">/</span><span class="nb">p</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span>
-</span><span class='line'><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="nb">p</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span>
-</span><span class='line'>  <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="sx">%= f.label :description %&amp;gt;&amp;lt;br /&amp;gt;</span>
-</span><span class='line'><span class="sx">  &amp;lt;%=</span> <span class="n">f</span><span class="o">.</span><span class="n">text_field</span> <span class="ss">:description</span> <span class="sx">%&amp;gt;</span>
-</span><span class='line'><span class="sx">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">/</span><span class="nb">p</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span>
-</span><span class='line'><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="nb">p</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span>
-</span><span class='line'>  <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">%=</span> <span class="n">f</span><span class="o">.</span><span class="n">submit</span> <span class="s2">&quot;Criar produto&quot;</span> <span class="sx">%&amp;gt;</span>
-</span><span class='line'><span class="sx">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">/</span><span class="nb">p</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span>
-</span><span class='line'><span class="o">&lt;</span><span class="sr">/code&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">%</span> <span class="k">end</span> <span class="o">%&gt;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>Complete nossa spec com teste para descrição:</p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>insira em spec/features/products/creating_products_spec.rb </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="n">scenario</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">com</span> <span class="n">descri</span><span class="err">çã</span><span class="n">o</span> <span class="n">inv</span><span class="err">á</span><span class="n">lida</span> <span class="n">n</span><span class="err">ã</span><span class="n">o</span> <span class="n">posso</span> <span class="n">criar</span> <span class="n">um</span> <span class="n">produto</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span> <span class="k">do</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;fill_in &#39;Nome&#39;, with: &#39;Meu produto&#39;</span>
-</span><span class='line'><span class="sr">fill_in &#39;Descrição&#39;, with: &#39;&#39;</span>
-</span><span class='line'><span class="sr">click_button &#39;Criar produto&#39;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">expect(page).to have_content(&#39;Descrição é muito curto (mínimo: 15 caracteres)&#39;)</span>
-</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;p&gt;  end</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>Poderíamos colocar mais testes, mas não é esse o intuíto do post (Fica de incentivo para você).</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Iniciando Em Ruby on Rails]]></title>
-    <link href="http://marceloboth.github.io/2014/06/iniciando-em-ruby-on-rails/"/>
-    <updated>2014-06-28T22:20:58-03:00</updated>
-    <id>http://marceloboth.github.io/2014/06/iniciando-em-ruby-on-rails</id>
-    <content type="html"><![CDATA[
+<p>O código pode ser baixado no <a href="https://github.com/marceloboth/crud-rspec">Github</a>, somente observe que cada post está
+dividido por branch.</p>
 ]]></content>
   </entry>
   

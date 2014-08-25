@@ -3,41 +3,29 @@
   
   
   <url>
-    <loc>http://marceloboth.github.io/2014/07/criando-um-cadastro-com-rspec-carregando-dados/</loc>
-    <lastmod>2014-07-20T16:10:06-03:00</lastmod>
-    <priority>0.8</priority>
-  </url>
-  
-  <url>
-    <loc>http://marceloboth.github.io/2014/06/crud-com-rails-criando-um-cadastro-usando-rspec/</loc>
-    <lastmod>2014-06-28T22:22:49-03:00</lastmod>
-    <priority>0.8</priority>
-  </url>
-  
-  <url>
-    <loc>http://marceloboth.github.io/2014/06/iniciando-em-ruby-on-rails/</loc>
-    <lastmod>2014-06-28T22:20:58-03:00</lastmod>
+    <loc>http://marceloboth.github.io/2014/08/iniciando-em-ruby-on-rails-com-testes/</loc>
+    <lastmod>2014-08-23T10:25:13-03:00</lastmod>
     <priority>0.8</priority>
   </url>
   
   
   <url>
     <loc>http://marceloboth.github.io/blog/archives/</loc>
-    <lastmod>2014-07-21T23:09:47-03:00</lastmod>
+    <lastmod>2014-08-24T23:11:36-03:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>http://marceloboth.github.io/</loc>
-    <lastmod>2014-07-21T23:09:47-03:00</lastmod>
+    <lastmod>2014-08-24T23:11:36-03:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   
   <url>
     <loc>http://marceloboth.github.io/about-me/</loc>
-    <lastmod>2014-07-21T23:09:47-03:00</lastmod>
+    <lastmod>2014-08-24T23:11:36-03:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
