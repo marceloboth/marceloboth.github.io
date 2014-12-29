@@ -167,6 +167,14 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
+<p>Edite a página de layout para possuir esse link:</p>
+
+<figure class='code'><figcaption><span>app/views/layouts/application.html.erb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='erb'><span class='line'><span class="x">  </span><span class="cp">&lt;%=</span> <span class="n">render</span> <span class="s2">&quot;layouts/navigation&quot;</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span></code></pre></td></tr></table></div></figure>
+
+
 <p>Rode os testes novamente e ocorrera um erro pois não definimos uma rota para os nossos produtos:</p>
 
 <figure class='code'><figcaption><span>Erro no bash </span></figcaption>
@@ -277,7 +285,7 @@
 
 <figure class='code'><figcaption><span>Comando para gerar tudo relacionado ao model </span></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>rails g model productect name:string description:string
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>rails g model Pproduct name:string description:string
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -410,10 +418,49 @@
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="kp">private</span>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">product_params</span>
-</span><span class='line'>    <span class="n">params</span><span class="o">.</span><span class="n">require</span><span class="p">(</span><span class="ss">:product</span><span class="p">)</span><span class="o">.</span><span class="n">permit</span><span class="p">(</span><span class="ss">:name</span><span class="p">,</span> <span class="ss">:description</span><span class="p">)</span>
-</span><span class='line'>  <span class="k">end</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="kp">private</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">product_params</span>
+</span><span class='line'>      <span class="n">params</span><span class="o">.</span><span class="n">require</span><span class="p">(</span><span class="ss">:product</span><span class="p">)</span><span class="o">.</span><span class="n">permit</span><span class="p">(</span><span class="ss">:name</span><span class="p">,</span> <span class="ss">:description</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Como vamos usar flash messages do Rails, é necessário em nosso application.html.erb definir um local para
+fazer a exibição das mensagens. Crie um diretório denominado <code>shared</code> dentro da pasta views. Nessa nova pasta
+crie o arquivo <code>_messages.html.erb</code>. Adicione o seguinte conteúdo:</p>
+
+<figure class='code'><figcaption><span>app/views/shared/_messages.html.erb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='erb'><span class='line'><span class="x">  </span><span class="cp">&lt;%</span> <span class="n">flash</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="nb">name</span><span class="p">,</span> <span class="n">msg</span><span class="o">|</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">    </span><span class="cp">&lt;%</span> <span class="k">if</span> <span class="n">msg</span><span class="o">.</span><span class="n">is_a?</span><span class="p">(</span><span class="nb">String</span><span class="p">)</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">      &lt;div class=&quot;alert alert-</span><span class="cp">&lt;%=</span> <span class="nb">name</span><span class="o">.</span><span class="n">to_s</span> <span class="o">==</span> <span class="s1">&#39;notice&#39;</span> <span class="p">?</span> <span class="s1">&#39;success&#39;</span> <span class="p">:</span> <span class="s1">&#39;danger&#39;</span> <span class="cp">%&gt;</span><span class="x">&quot;&gt;</span>
+</span><span class='line'><span class="x">        &lt;button type=&quot;button&quot; class=&quot;close&quot; data-dismiss=&quot;alert&quot; aria-hidden=&quot;true&quot;&gt;&amp;times;&lt;/button&gt;</span>
+</span><span class='line'><span class="x">        </span><span class="cp">&lt;%=</span> <span class="n">content_tag</span> <span class="ss">:div</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="ss">:id</span> <span class="o">=&gt;</span> <span class="s2">&quot;flash_</span><span class="si">#{</span><span class="nb">name</span><span class="si">}</span><span class="s2">&quot;</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">      &lt;/div&gt;</span>
+</span><span class='line'><span class="x">    </span><span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">  </span><span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Com o partial criado, adicione a chamada de renderização no arquivo de layout, logo acima da
+instrução <code>yield</code>:</p>
+
+<figure class='code'><figcaption><span>app/views/layouts/application.html.erb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='erb'><span class='line'><span class="x">  &lt;div class=&quot;container&quot;&gt;</span>
+</span><span class='line'><span class="x">    </span><span class="cp">&lt;%=</span> <span class="n">render</span> <span class="s1">&#39;shared/messages&#39;</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">    </span><span class="cp">&lt;%=</span> <span class="k">yield</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">  &lt;/div&gt;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -764,6 +811,36 @@ como nome e descrição. Basta mudar no nosso arquivo de tradução  em <code>co
 </span></code></pre></td></tr></table></div></figure>
 
 
+<p>E mude a configuração padrão, para reconhecer a tradução bem como torna-la default
+para o nosso sistema:</p>
+
+<figure class='code'><figcaption><span>ajuste a tradução em config/application.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="k">module</span> <span class="nn">CrudRspec</span>
+</span><span class='line'>    <span class="k">class</span> <span class="nc">Application</span> <span class="o">&lt;</span> <span class="no">Rails</span><span class="o">::</span><span class="no">Application</span>
+</span><span class='line'>      <span class="n">config</span><span class="o">.</span><span class="n">time_zone</span> <span class="o">=</span> <span class="s1">&#39;Brasilia&#39;</span>
+</span><span class='line'>      <span class="n">config</span><span class="o">.</span><span class="n">i18n</span><span class="o">.</span><span class="n">default_locale</span> <span class="o">=</span> <span class="ss">:&#39;pt-BR&#39;</span>
+</span><span class='line'>      <span class="n">config</span><span class="o">.</span><span class="n">i18n</span><span class="o">.</span><span class="n">load_path</span> <span class="o">+=</span> <span class="no">Dir</span><span class="o">[</span><span class="s2">&quot;</span><span class="si">#{</span><span class="no">Rails</span><span class="o">.</span><span class="n">root</span><span class="si">}</span><span class="s2">/config/locales/**/*.{rb,yml}&quot;</span><span class="o">]</span>
+</span><span class='line'>      <span class="n">config</span><span class="o">.</span><span class="n">encoding</span> <span class="o">=</span> <span class="s1">&#39;utf-8&#39;</span>
+</span><span class='line'>      <span class="no">I18n</span><span class="o">.</span><span class="n">enforce_available_locales</span> <span class="o">=</span> <span class="kp">false</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>E também baixe a tradução das mensagens. Salve no diretorio <code>config/locales/pt-BR</code> com
+o nome de rails.pt-BR.yml. Baixe desse repositório:</p>
+
+<p><a href="https://raw.githubusercontent.com/svenfuchs/rails-i18n/master/rails/locale/pt-BR.yml">https://raw.githubusercontent.com/svenfuchs/rails-i18n/master/rails/locale/pt-BR.yml</a></p>
+
 <p>Dessa maneira podemos traduzir tudo que o active record gera automáticamente, é uma maneira
 muito flexível de se traduzir o nosso sistema. Rode novamente os testes e dessa vez, nossa
 spec passou. Hora de refatorar. Agora que colocamos a tradução dos campos do active record,
@@ -827,6 +904,9 @@ a tradução:</p>
 
 
 <p>Poderíamos colocar mais testes, mas não é esse o intuíto do post (Fica de incentivo para você).</p>
+
+<p>O código fonte pode ser baixado aqui: <a href="https://github.com/marceloboth/crud-rspec.">https://github.com/marceloboth/crud-rspec.</a> Baixando o código
+faça checkout para o branch criando_cadastro: <code>git chechout criando_cadastro</code>.</p>
 </div>
   
   
