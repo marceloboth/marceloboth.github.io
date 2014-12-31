@@ -3,6 +3,12 @@
   
   
   <url>
+    <loc>http://marceloboth.github.io/2014/12/crud-com-rails-listando-cadastros/</loc>
+    <lastmod>2014-12-29T16:15:45-02:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
     <loc>http://marceloboth.github.io/2014/09/crud-com-rails-criando-um-cadastro-usando-rspec/</loc>
     <lastmod>2014-09-30T23:27:36-03:00</lastmod>
     <priority>0.8</priority>
@@ -17,21 +23,21 @@
   
   <url>
     <loc>http://marceloboth.github.io/blog/archives/</loc>
-    <lastmod>2014-12-29T15:47:40-02:00</lastmod>
+    <lastmod>2014-12-31T13:20:48-02:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>http://marceloboth.github.io/</loc>
-    <lastmod>2014-12-29T15:47:40-02:00</lastmod>
+    <lastmod>2014-12-31T13:20:48-02:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   
   <url>
     <loc>http://marceloboth.github.io/about-me/</loc>
-    <lastmod>2014-12-29T15:47:40-02:00</lastmod>
+    <lastmod>2014-12-31T13:20:48-02:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
