@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Iniciantes, | Personal blog]]></title>
   <link href="http://marceloboth.github.io/categories/iniciantes/atom.xml" rel="self"/>
   <link href="http://marceloboth.github.io/"/>
-  <updated>2015-01-11T22:33:03-02:00</updated>
+  <updated>2015-01-11T22:51:43-02:00</updated>
   <id>http://marceloboth.github.io/</id>
   <author>
     <name><![CDATA[Marcelo J. Both]]></name>
@@ -102,16 +102,70 @@ template <code>app/views/products/index.html.erb</code> adicione na listagem de 
 </span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>Mas somente isso não é suficiente, precisamos usar o FactoryGirl novamente, para ao menos
-termos um registro e assim a nossa listagem ter o link. Ao teste adicione no bloco before:</p>
+termos um registro e assim a nossa listagem ter o link. Ao teste adicione no início
+do bloco before:</p>
 
 <p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>rspec spec/features/products/editing_products_spec.rb </span></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>&lt;/p&gt;
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="n">before</span> <span class="k">do</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
 </span><span class='line'>
-</span><span class='line'>&lt;p&gt;
+</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;product = FactoryGirl.create(:product)</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">visit root_path</span>
+</span><span class='line'><span class="sr">click_link &#39;Produtos&#39;</span>
+</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;  end</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Rode seu teste e ocorrerá um erro devido a falta de uma ação edit em nosso controlador.
+Adicione:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/controllers/products_controller.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">ProductsController</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="no">ApplicationController</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;  &amp;hellip; Adicione antes dos metodos privados &amp;hellip;</span>
+</span><span class='line'><span class="sr">  def edit&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="k">end</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;  private&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;.</span><span class="n">.</span><span class="o">.</span><span class="n">.</span>
+</span><span class='line'><span class="o">&lt;</span><span class="sr">/code&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Rodando novamente os testes, teremos um erro pela falta do nosso template de edição.
+Adicione um arquivo de template em <code>app/views/products/edit.html.erb</code>. Agora nosso
+teste está passando. Ou seja, nossa aplicação já tem um página de edição. Nosso próximo
+passo e exibir um formulário com os dados e alterá-los.</p>
+
+<h2>Carregando os dados no formulário de edição</h2>
+
+<h2>Editando os dados</h2>
 ]]></content>
   </entry>
   

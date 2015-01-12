@@ -163,13 +163,60 @@ template <code>app/views/products/index.html.erb</code> adicione na listagem de 
 
 
 <p>Mas somente isso não é suficiente, precisamos usar o FactoryGirl novamente, para ao menos
-termos um registro e assim a nossa listagem ter o link. Ao teste adicione no bloco before:</p>
+termos um registro e assim a nossa listagem ter o link. Ao teste adicione no início
+do bloco before:</p>
 
 <figure class='code'><figcaption><span>rspec spec/features/products/editing_products_spec.rb </span></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="n">before</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">product</span> <span class="o">=</span> <span class="no">FactoryGirl</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="ss">:product</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">visit</span> <span class="n">root_path</span>
+</span><span class='line'>    <span class="n">click_link</span> <span class="s1">&#39;Produtos&#39;</span>
+</span><span class='line'>  <span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
 
+
+<p>Rode seu teste e ocorrerá um erro devido a falta de uma ação edit em nosso controlador.
+Adicione:</p>
+
+<figure class='code'><figcaption><span>app/controllers/products_controller.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">ProductsController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="o">.</span><span class="n">.</span><span class="o">.</span> <span class="no">Adicione</span> <span class="n">antes</span> <span class="n">dos</span> <span class="n">metodos</span> <span class="n">privados</span> <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">edit</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kp">private</span>
+</span><span class='line'>    <span class="o">.</span><span class="n">.</span><span class="o">.</span><span class="n">.</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Rodando novamente os testes, teremos um erro pela falta do nosso template de edição.
+Adicione um arquivo de template em <code>app/views/products/edit.html.erb</code>. Agora nosso
+teste está passando. Ou seja, nossa aplicação já tem um página de edição. Nosso próximo
+passo e exibir um formulário com os dados e alterá-los.</p>
+
+<h2>Carregando os dados no formulário de edição</h2>
+
+<h2>Editando os dados</h2>
 </div>
   
   
