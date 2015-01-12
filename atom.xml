@@ -4,7 +4,7 @@
   <title><![CDATA[Personal blog]]></title>
   <link href="http://marceloboth.github.io/atom.xml" rel="self"/>
   <link href="http://marceloboth.github.io/"/>
-  <updated>2014-12-31T13:20:48-02:00</updated>
+  <updated>2015-01-11T22:33:03-02:00</updated>
   <id>http://marceloboth.github.io/</id>
   <author>
     <name><![CDATA[Marcelo J. Both]]></name>
@@ -12,6 +12,88 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[CRUD Com Rails - Editando Um Cadastro]]></title>
+    <link href="http://marceloboth.github.io/2015/01/crud-com-rails-editando-um-cadastro/"/>
+    <updated>2015-01-11T22:05:34-02:00</updated>
+    <id>http://marceloboth.github.io/2015/01/crud-com-rails-editando-um-cadastro</id>
+    <content type="html"><![CDATA[<p>Seguindo nosso CRUD, vamos trabalhar nesse post, a alteração de dados (Update).
+Primeiramente crie o arquivo para testar o processo de alteração. Em <code>spec/features/products</code>
+crie mais um arquivo nomeado <code>editing_products_spec.rb</code>. Nesse arquivo adicione
+o seguinte código:</p>
+
+<figure class='code'><figcaption><span>spec/features/products/editing_products_spec.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="nb">require</span> <span class="s1">&#39;rails_helper&#39;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">feature</span> <span class="s1">&#39;Editando Produtos&#39;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">before</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">visit</span> <span class="n">root_path</span>
+</span><span class='line'>      <span class="n">click_link</span> <span class="s1">&#39;Produtos&#39;</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">scenario</span> <span class="s2">&quot;posso editar um produto&quot;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">click_link</span> <span class="s2">&quot;Editar&quot;</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Rode os testes e um erro devido a falta do link &ldquo;Editar&rdquo; será apresentado pelo rspec.</p>
+
+<figure class='code'><figcaption><span>rspec spec/features/products/editing_products_spec.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>  Failure/Error: click_link <span class="s2">&quot;Editar&quot;</span>
+</span><span class='line'>     Capybara::ElementNotFound:
+</span><span class='line'>       Unable to find link <span class="s2">&quot;Editar&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Precisamos adicionar o link de edição a listagem de produtos. Vamos lá, no arquivo de
+template <code>app/views/products/index.html.erb</code> adicione na listagem de dados, o link de edição:</p>
+
+<figure class='code'><figcaption><span>app/views/products/index.html.erb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='erb'><span class='line'><span class="x">  </span><span class="cp">&lt;%</span> <span class="vi">@products</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">product</span><span class="o">|</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">    &lt;tr&gt;</span>
+</span><span class='line'><span class="x">      &lt;td&gt;</span><span class="cp">&lt;%=</span> <span class="n">product</span><span class="o">.</span><span class="n">name</span> <span class="cp">%&gt;</span><span class="x">&lt;/td&gt;</span>
+</span><span class='line'><span class="x">      &lt;td&gt;</span><span class="cp">&lt;%=</span> <span class="n">product</span><span class="o">.</span><span class="n">description</span> <span class="cp">%&gt;</span><span class="x">&lt;/td&gt;</span>
+</span><span class='line'><span class="x">      &lt;td&gt;</span><span class="cp">&lt;%=</span> <span class="n">link_to</span> <span class="s2">&quot;Editar&quot;</span><span class="p">,</span> <span class="n">edit_product_path</span><span class="p">(</span><span class="n">product</span><span class="p">),</span> <span class="ss">class</span><span class="p">:</span> <span class="s2">&quot;btn btn-default&quot;</span> <span class="cp">%&gt;</span><span class="x">&lt;/td&gt;</span>
+</span><span class='line'><span class="x">    &lt;/tr&gt;</span>
+</span><span class='line'><span class="x">  </span><span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Mas somente isso não é suficiente, precisamos usar o FactoryGirl novamente, para ao menos
+termos um registro e assim a nossa listagem ter o link. Ao teste adicione no bloco before:</p>
+
+<figure class='code'><figcaption><span>rspec spec/features/products/editing_products_spec.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[CRUD Com Rails - Listando Cadastros]]></title>
